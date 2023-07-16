@@ -2,3 +2,12 @@
     margin: 0;
     padding: 0;
 }
+
+::ng-deep html {
+    height: 100%;
+}
+
+::ng-deep body {
+    height: 100%;
+    width: 100%;
+}
