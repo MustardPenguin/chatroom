@@ -7,19 +7,19 @@
         <a class="btn" routerLink="/home">
             Home
         </a>
-        <button class="btn" routerLink="/rooms">
+        <a class="btn" routerLink="/rooms">
             Rooms
-        </button>
+        </a>
     </div>
     <div class="self-center">
-        <button class="btn" routerLink="/login">
+        <a class="btn" routerLink="/login" *ngIf="!authenticated">
             Login
-        </button>
-        <button class="btn" routerLink="/register">
+        </a>
+        <a class="btn" routerLink="/register" *ngIf="!authenticated">
             Register
-        </button>
-        <button class="btn" routerLink="/home">
+        </a>
+        <a class="btn" routerLink="/home" *ngIf="authenticated">
             Logout
-        </button>
+        </a>
     </div>
 </div>

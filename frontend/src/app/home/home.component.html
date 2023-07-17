@@ -1,1 +1,23 @@
-<p>home works!</p>
+<div class="mt-5 mx-5 justify-center">
+    <div class="flex justify-center">
+        <div class="shadow-md w-2/3">
+            <div class="mt-5 flex flex-col">
+                
+                <div class="self-center text-4xl font-bold">Home</div>
+                
+                <div class="mt-6 self-center text-2xl">
+                    {{authenticated ?
+                        "Welcome username" : 
+                        "Please log in to view your chatrooms."
+                    }}
+                </div>
+
+                <button *ngIf="authenticated" 
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mx-3 mt-5 self-center">
+                    Create a chatroom
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

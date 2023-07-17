@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AccountService {
-  authenticated: boolean = true;
+  authenticated: boolean = false;
   token?: string;
   
   constructor() { }
@@ -19,5 +19,6 @@ export class AccountService {
 
   register(): void {
     console.log('register');
+    
   }
 }
