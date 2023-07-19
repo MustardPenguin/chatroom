@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
+import axios from 'axios';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +9,7 @@ export class AccountService {
   authenticated: boolean = false;
   token?: string;
   
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   login(): void {
     console.log('login');
@@ -19,6 +21,12 @@ export class AccountService {
 
   register(): void {
     console.log('register');
-    
+    this.apiService.postRegister()
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+
+      });
   }
 }
