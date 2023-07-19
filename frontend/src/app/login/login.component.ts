@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '../services/account/account.service';
+import { Form, FormControl } from '@angular/forms';
+import { Account } from '../interface/account';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +11,10 @@ import { AccountService } from '../services/account/account.service';
 })
 export class LoginComponent implements OnInit {
   url: string = "login";
+  account: Account = {
+    username: "", password: ""
+  }
+
 
   constructor(
     private accountService: AccountService,
@@ -27,5 +33,11 @@ export class LoginComponent implements OnInit {
   register(event: Event): void {
     event.preventDefault();
     this.accountService.register();
+  }
+
+  checkValid(string: string): boolean {
+    const regex = /^[a-zA-Z0-9\-]+$/;
+    const valid = regex.exec(string);
+    return !!valid;
   }
 }
