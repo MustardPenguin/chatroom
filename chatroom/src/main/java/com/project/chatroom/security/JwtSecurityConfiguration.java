@@ -14,10 +14,13 @@ public class JwtSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
-                auth -> auth.anyRequest().authenticated()
+                auth -> auth
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/register").permitAll()
+                        .anyRequest().authenticated()
 
         ).csrf(AbstractHttpConfigurer::disable);
-        http.cors();
+        http.cors(AbstractHttpConfigurer::disable);
         http.httpBasic(Customizer.withDefaults());
         http.headers(header ->
                 header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
