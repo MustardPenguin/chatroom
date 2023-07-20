@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import axios from 'axios';
+import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 
 @Injectable({
@@ -9,7 +9,7 @@ export class AccountService {
   authenticated: boolean = false;
   token?: string;
   
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private router: Router) { }
 
   login(): void {
     console.log('login');
@@ -19,14 +19,19 @@ export class AccountService {
     console.log('logout');
   }
 
-  register(): void {
+  register(username: string, password: string): void {
     console.log('register');
-    this.apiService.postRegister()
+    this.apiService.postRegister(username, password)
       .then(response => {
         console.log(response);
+        if(response.status === 201) {
+          this.router.navigate(["login"]);
+          window.alert(response.data);
+        }
       })
       .catch(err => {
-
+        console.log(err);
+        window.alert(err.response.data);
       });
   }
 }

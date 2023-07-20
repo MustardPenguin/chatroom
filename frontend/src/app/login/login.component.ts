@@ -15,11 +15,10 @@ export class LoginComponent implements OnInit {
     username: "", password: ""
   }
 
-
   constructor(
     private accountService: AccountService,
     private router: Router
-    ) {}
+  ) {}
 
   ngOnInit(): void {
     this.url = this.router.url.slice(1, 2).toUpperCase() + this.router.url.slice(2);
@@ -32,7 +31,16 @@ export class LoginComponent implements OnInit {
 
   register(event: Event): void {
     event.preventDefault();
-    this.accountService.register();
+    if(this.account.username.length < 3 || this.account.password.length < 3) {
+      window.alert('Please enter at least 3 characters.');
+      return;
+    }
+    if(!this.checkValid(this.account.username) || !this.checkValid(this.account.password)) {
+      window.alert('Please enter at a valid character.');
+      return;
+    }
+
+    this.accountService.register(this.account.username, this.account.password);
   }
 
   checkValid(string: string): boolean {

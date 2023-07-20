@@ -30,12 +30,12 @@
                         
                         
                         <!-- Errors -->
-                        <div [hidden]="
+                        <div *ngIf="url === 'Register'" [hidden]="
                         account.username.length > 2 || account.username.length == 0"
                         class="flex justify-center"
                         >Please enter at least 3 characters</div>
 
-                        <div [hidden]="
+                        <div *ngIf="url === 'Register'" [hidden]="
                         checkValid(account.username) || account.username.length == 0"
                         class="flex justify-center"
                         >Please enter a valid character</div>
@@ -64,13 +64,13 @@
                         
 
                         <!-- Errors -->
-                        <div [hidden]="
-                        account.password.length > 2 || account.password.length == 0"
+                        <div *ngIf="url === 'Register'" [hidden]="
+                        account.password.length > 2 || account.password.length === 0"
                         class="flex justify-center"
                         >Please enter at least 3 characters</div>
 
-                        <div [hidden]="
-                        checkValid(account.password) || account.password.length == 0"
+                        <div *ngIf="url === 'Register'" [hidden]="
+                        checkValid(account.password) || account.password.length === 0"
                         class="flex justify-center"
                         >Please enter a valid character</div>
                     </div>

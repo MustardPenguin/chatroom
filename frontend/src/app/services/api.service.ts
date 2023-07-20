@@ -19,15 +19,15 @@ export class ApiService {
     });
   };
 
-  postRegister() {
+  postRegister(username: string, password: string) {
     return api.post('/register', { // change to register later
-      username: "",
+      username: username, password: password
     });
   };
 
   postLogin() {
     return api.post('/login', {
-
+        
     });
   }
 
