@@ -1,6 +1,8 @@
 package com.project.chatroom.account;
 
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,6 +17,7 @@ import java.util.List;
 @RestController
 public class AccountResource {
     AccountRepository accountRepository;
+    Logger logger = LoggerFactory.getLogger(AccountResource.class);
     public AccountResource(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -40,7 +43,7 @@ public class AccountResource {
             return new ResponseEntity<String>("Username already exists", HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println(account);
+        logger.info(account.toString());
         accountRepository.save(account);
 
         return new ResponseEntity<String>("Successfully created account", HttpStatus.CREATED);
