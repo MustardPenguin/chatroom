@@ -1,13 +1,17 @@
 package com.project.chatroom.account;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-public class Account {
+public class Account implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -20,6 +24,9 @@ public class Account {
     @Size(min=3, max=30, message="Please input at least 3 characters for password")
     @Pattern(regexp="^[a-zA-Z0-9]*$", message="Please input a valid character for the password")
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public Account() {
 
@@ -58,5 +65,30 @@ public class Account {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 }
