@@ -17,25 +17,6 @@ import java.time.Instant;
 @RestController
 public class JwtResource {
 
-    private final JwtTokenService jwtTokenService;
-    private final AuthenticationManager authenticationManager;
-
-    public JwtResource(JwtTokenService jwtTokenService, AuthenticationManager authenticationManager) {
-        this.jwtTokenService = jwtTokenService;
-        this.authenticationManager = authenticationManager;
-    }
-
-    @PostMapping("/authenticate")
-    public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest) {
-        System.out.println(jwtRequest);
-
-        var authenticationToken = new UsernamePasswordAuthenticationToken(
-                jwtRequest.username(), jwtRequest.password()
-        );
-
-        return new JwtResponse(jwtTokenService.generateToken());
-    }
-
     @GetMapping("test")
     public String test() {
         return "test";

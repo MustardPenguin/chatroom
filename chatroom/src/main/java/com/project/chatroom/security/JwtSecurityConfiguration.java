@@ -55,78 +55,8 @@ public class JwtSecurityConfiguration {
                 header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
         );
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.oauth2ResourceServer(auth -> auth.jwt(Customizer.withDefaults()));
+//        http.oauth2ResourceServer(auth -> auth.jwt(Customizer.withDefaults()));
 
         return http.build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
-        var authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        return new ProviderManager(authenticationProvider);
-    }
-
-    @Bean
-    public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
-                .build();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-
-        UserDetails userDetails = User
-                .withUsername("user")
-                .password("{noop}dummy")
-                .build();
-
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        jdbcUserDetailsManager.createUser(userDetails);
-        return jdbcUserDetailsManager;
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public KeyPair keyPair() {
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
-            return keyPairGenerator.generateKeyPair();
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
-    @Bean
-    public RSAKey rsaKey(KeyPair keyPair) {
-        return new RSAKey
-                .Builder((RSAPublicKey) keyPair.getPublic())
-                .privateKey(keyPair.getPrivate())
-                .keyID(UUID.randomUUID().toString())
-                .build();
-    }
-
-    @Bean
-    public JWKSource<SecurityContext> jwkSource(RSAKey rsaKey) {
-        JWKSet jwkSet = new JWKSet(rsaKey);
-        return ((jwkSelector, context) -> jwkSelector.select(jwkSet));
-    }
-
-    @Bean
-    public JwtDecoder jwtDecoder(RSAKey rsaKey) throws JOSEException {
-        return NimbusJwtDecoder
-                .withPublicKey(rsaKey.toRSAPublicKey()).build();
-    }
-
-    @Bean
-    public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
-        return new NimbusJwtEncoder(jwkSource);
     }
 }
