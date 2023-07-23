@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class AccountResource {
@@ -38,8 +39,8 @@ public class AccountResource {
             return ResponseEntity.badRequest().body(errors.toString());
         }
 
-        Account findUser = accountRepository.findByUsername(account.getUsername());
-        if(findUser != null) {
+        Optional<Account> findUser = accountRepository.findByUsername(account.getUsername());
+        if(findUser.isPresent()) {
             return new ResponseEntity<String>("Username already exists", HttpStatus.BAD_REQUEST);
         }
 
