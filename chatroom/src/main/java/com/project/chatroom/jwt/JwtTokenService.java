@@ -1,4 +1,4 @@
-package com.project.chatroom.security;
+package com.project.chatroom.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,13 +6,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtTokenService {
 
-    private static final String SECRET_KEY = "ikm9h12F7QOW5znk4U9z6r9Cd6QuS1Tm";
+    private static final String SECRET_KEY = "eba2564000c1fa6172fb005030cd5c173dd15e8c6e5fb8d2b67093d6dc2712ce";
 
     public String extractUsername(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);

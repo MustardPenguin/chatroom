@@ -1,10 +1,15 @@
 package com.project.chatroom.account;
 
+import com.project.chatroom.jwt.JwtResponse;
+import com.project.chatroom.jwt.JwtTokenService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,19 +22,36 @@ import java.util.Optional;
 
 @RestController
 public class AccountResource {
-    AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenService jwtTokenService;
+
     Logger logger = LoggerFactory.getLogger(AccountResource.class);
-    public AccountResource(AccountRepository accountRepository) {
+    public AccountResource(AccountRepository accountRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenService jwtTokenService) {
         this.accountRepository = accountRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenService = jwtTokenService;
     }
 
     @PostMapping("/login")
-    public void login() {
+    public JwtResponse login(@RequestBody AccountRequestBody accountRequestBody) {
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    accountRequestBody.getUsername(),
+                    accountRequestBody.getPassword()
+            )
+        );
 
+        Account account = accountRepository.findByUsername(accountRequestBody.getUsername())
+                .orElseThrow();
+        String jwtToken = jwtTokenService.generateToken(account);
+        return new JwtResponse(jwtToken);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid Account account, BindingResult bindingResult) {
+    public ResponseEntity<String> register(@RequestBody @Valid AccountRequestBody accountRequestBody, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<String>();
@@ -39,11 +61,18 @@ public class AccountResource {
             return ResponseEntity.badRequest().body(errors.toString());
         }
 
-        Optional<Account> findUser = accountRepository.findByUsername(account.getUsername());
+        Optional<Account> findUser = accountRepository.findByUsername(accountRequestBody.getUsername());
         if(findUser.isPresent()) {
             return new ResponseEntity<String>("Username already exists", HttpStatus.BAD_REQUEST);
         }
 
+        String encodedPassword = passwordEncoder.encode(accountRequestBody.getPassword());
+        Account account = new Account(
+                null,
+                accountRequestBody.getUsername(),
+                encodedPassword,
+                Role.USER
+        );
         logger.info(account.toString());
         accountRepository.save(account);
 

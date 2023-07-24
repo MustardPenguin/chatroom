@@ -17,12 +17,8 @@ public class Account implements UserDetails {
     @GeneratedValue
     private Integer id;
 
-    @Size(min=3, max=30, message="Please input at least 3 characters for username")
-    @Pattern(regexp="^[a-zA-Z0-9]*$", message="Please input a valid character for the username")
     private String username;
 
-    @Size(min=3, max=30, message="Please input at least 3 characters for password")
-    @Pattern(regexp="^[a-zA-Z0-9]*$", message="Please input a valid character for the password")
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -32,10 +28,11 @@ public class Account implements UserDetails {
 
     }
 
-    public Account(Integer id, String username, String password) {
+    public Account(Integer id, String username, String password, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -57,6 +54,14 @@ public class Account implements UserDetails {
     public String getPassword() { return password; }
 
     public void setPassword(String password) { this.password = password; }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     @Override
     public String toString() {
