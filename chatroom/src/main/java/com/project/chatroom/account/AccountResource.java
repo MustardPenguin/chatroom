@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -37,15 +39,20 @@ public class AccountResource {
 
     @PostMapping("/login")
     public JwtResponse login(@RequestBody AccountRequestBody accountRequestBody) {
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                    accountRequestBody.getUsername(),
-                    accountRequestBody.getPassword()
-            )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            accountRequestBody.getUsername(),
+                            accountRequestBody.getPassword()
+                    )
+            );
+        } catch(AuthenticationException authenticationException) {
+//            throw new UsernameNotFoundException("Incorrect credentials");
+            return new JwtResponse("Error: Incorrect credentials");
+        }
 
         Account account = accountRepository.findByUsername(accountRequestBody.getUsername())
-                .orElseThrow();
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
         String jwtToken = jwtTokenService.generateToken(account);
         return new JwtResponse(jwtToken);
     }
