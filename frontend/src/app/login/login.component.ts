@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   login(event: Event): void {
     event.preventDefault();
-    this.accountService.login();
+    this.accountService.login(this.account.username, this.account.password);
   }
 
   register(event: Event): void {

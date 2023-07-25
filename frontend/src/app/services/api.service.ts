@@ -12,7 +12,7 @@ export class ApiService {
 
   constructor() { }
 
-  updateHeaders(authorizationToken: string): void {
+  updateAuthorizationHeaders(authorizationToken: string): void {
     api.interceptors.request.use(config => {
       config.headers.Authorization = authorizationToken;
       return config;
@@ -25,9 +25,9 @@ export class ApiService {
     });
   };
 
-  postLogin() {
+  postLogin(username: string, password: string) {
     return api.post('/login', {
-        
+        username: username, password: password
     });
   }
 

@@ -12,13 +12,13 @@
         </a>
     </div>
     <div class="self-center">
-        <a class="btn" routerLink="/login" *ngIf="!authenticated">
+        <a class="btn" routerLink="/login" *ngIf="!isAuthenticated()">
             Login
         </a>
-        <a class="btn" routerLink="/register" *ngIf="!authenticated">
+        <a class="btn" routerLink="/register" *ngIf="!isAuthenticated()">
             Register
         </a>
-        <a class="btn" routerLink="/home" *ngIf="authenticated">
+        <a class="btn" routerLink="/home" *ngIf="isAuthenticated()" (click)="logout()">
             Logout
         </a>
     </div>

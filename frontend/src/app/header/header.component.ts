@@ -11,6 +11,14 @@ export class HeaderComponent implements OnInit {
 
   constructor(private accountService: AccountService) {}
 
+  isAuthenticated(): boolean {
+    return this.accountService.authenticated;
+  }
+
+  logout(): void {
+    this.accountService.logOut();
+  }
+
   ngOnInit(): void {
       this.authenticated = this.accountService.authenticated;
   }
