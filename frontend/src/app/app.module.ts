@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
+import { CreateRoomComponent } from './create-room/create-room.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { FormsModule } from '@angular/forms';
     HomeComponent,
     RoomsComponent,
     LoginComponent,
+    CreateRoomComponent,
   ],
   imports: [
     BrowserModule,
