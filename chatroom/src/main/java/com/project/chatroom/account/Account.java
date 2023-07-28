@@ -1,5 +1,8 @@
 package com.project.chatroom.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.chatroom.message.Message;
+import com.project.chatroom.room.Chatroom;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -19,10 +22,19 @@ public class Account implements UserDetails {
 
     private String username;
 
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
+    private List<Message> messages;
+
+//    @OneToMany(mappedBy = "account")
+//    @JsonIgnore
+//    private List<Chatroom> chatrooms;
 
     public Account() {
 
