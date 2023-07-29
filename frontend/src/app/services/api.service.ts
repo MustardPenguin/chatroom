@@ -13,8 +13,9 @@ export class ApiService {
   constructor() { }
 
   updateAuthorizationHeaders(authorizationToken: string): void {
+    console.log("Bearer " + authorizationToken);
     api.interceptors.request.use(config => {
-      config.headers.Authorization = authorizationToken;
+      config.headers.Authorization = "Bearer " + authorizationToken;
       return config;
     });
   };
@@ -31,11 +32,15 @@ export class ApiService {
     });
   }
 
+  postCreateRoom(name: string) {
+    return api.post("/chatroom", {
+      name: name
+    });
+  }
+
   getTest() {
     return api.get('/test', {
-      headers: {
-        Authorization: 'Basic ' + btoa("user:dummy")
-      }
+      
     })
   };
 

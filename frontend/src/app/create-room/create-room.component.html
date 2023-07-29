@@ -1,10 +1,15 @@
+<button (click)="getTest()">
+    Get test
+</button>
+
+
 <div class="mt-5 mx-5 justify-center">
     <div class="flex justify-center">
         <div class="shadow-md w-2/3">
             <div class="mt-5 flex flex-col">
                 <div class="self-center font-bold text-3xl mb-4">Create a chatroom</div>
                 
-                <form class="flex flex-col self-center w-96" >
+                <form class="flex flex-col self-center w-96" (ngSubmit)="createRoom($event)" >
 
                     <div class="relative mb-4" data-te-input-wrapper-init>
                         <div class="flex justify-between">
@@ -20,7 +25,7 @@
                             class="border-solid border-2 p-2"
                             id="room-name"
                             placeholder="Enter room name here"
-                            
+                            [(ngModel)]="room.name"
                             name="room-name"
                             required
                             />
