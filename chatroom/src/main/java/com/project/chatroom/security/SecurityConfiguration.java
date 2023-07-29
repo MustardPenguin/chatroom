@@ -35,13 +35,16 @@ public class SecurityConfiguration {
 
         );
         http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(AbstractHttpConfigurer::disable);
+//        http.cors(AbstractHttpConfigurer::disable);
+        http.cors(Customizer.withDefaults());
+
         http.httpBasic(Customizer.withDefaults());
         http.headers(header ->
                 header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
         );
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.authenticationProvider(authenticationProvider);
 //        http.oauth2ResourceServer(auth -> auth.jwt(Customizer.withDefaults()));
 
         return http.build();
