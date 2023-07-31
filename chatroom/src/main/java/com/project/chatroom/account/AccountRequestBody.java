@@ -5,11 +5,11 @@ import jakarta.validation.constraints.Size;
 
 public class AccountRequestBody {
 
-    @Size(min=3, max=30, message="Please input at least 3 characters for username")
+    @Size(min=3, max=20, message="Please input at least 3 characters for username")
     @Pattern(regexp="^[a-zA-Z0-9]*$", message="Please input a valid character for the username")
     private String username;
 
-    @Size(min=3, max=30, message="Please input at least 3 characters for password")
+    @Size(min=3, max=20, message="Please input between 3 and 20 password")
     @Pattern(regexp="^[a-zA-Z0-9]*$", message="Please input a valid character for the password")
     private String password;
 

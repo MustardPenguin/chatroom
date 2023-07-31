@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Account implements UserDetails {
@@ -28,13 +29,21 @@ public class Account implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany
+    private Set<Chatroom> ownedRooms;
+
     @OneToMany(mappedBy = "account")
     @JsonIgnore
     private List<Message> messages;
 
-//    @OneToMany(mappedBy = "account")
-//    @JsonIgnore
-//    private List<Chatroom> chatrooms;
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "account_chatroom",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "chatroom_id")
+    )
+    private Set<Chatroom> chatrooms;
 
     public Account() {
 

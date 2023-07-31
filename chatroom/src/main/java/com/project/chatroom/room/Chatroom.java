@@ -3,12 +3,10 @@ package com.project.chatroom.room;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.chatroom.account.Account;
 import com.project.chatroom.message.Message;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Chatroom {
@@ -20,12 +18,15 @@ public class Chatroom {
 
     private String name;
 
+    @ManyToOne
+    private Account owner;
+
     @OneToMany(mappedBy = "chatroom")
     @JsonIgnore
     private List<Message> messages;
 
-//    @OneToMany(mappedBy = "chatroom")
-//    private List<Account> accounts;
+    @ManyToMany(mappedBy = "chatrooms")
+    private Set<Account> accounts;
 
     public Chatroom() {
 
