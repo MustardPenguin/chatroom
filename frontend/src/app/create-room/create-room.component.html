@@ -30,6 +30,17 @@
                             required
                             />
                         </div>
+
+                        <!-- Errors -->
+                        <div [hidden]="
+                        room.name.length > 2 || room.name.length == 0"
+                        class="flex justify-center"
+                        >Please enter at least 3 characters.</div>
+
+                        <div [hidden]="
+                        room.name.length < 20"
+                        class="flex justify-center"
+                        >Please enter no more than 20 characters.</div>
                     </div>
 
                     <button 

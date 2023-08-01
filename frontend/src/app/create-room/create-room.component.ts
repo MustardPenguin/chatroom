@@ -17,6 +17,9 @@ export class CreateRoomComponent {
   createRoom(event: Event): void {
     event.preventDefault();
     console.log(this.room.name);
+    if(this.room.name.length === 0 || this.room.name.length < 3) {
+      return;
+    }
 
     this.apiService.postCreateRoom(this.room.name)
       .then(response => {

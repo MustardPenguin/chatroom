@@ -44,5 +44,9 @@ export class ApiService {
     })
   };
 
-  
+  getChatrooms() {
+    return api.get("/chatroom", {
+
+    });
+  }
 }
