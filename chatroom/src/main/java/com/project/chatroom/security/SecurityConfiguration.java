@@ -3,6 +3,7 @@ package com.project.chatroom.security;
 import com.project.chatroom.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers("/login", "/register").permitAll()
-                        .requestMatchers("/authenticate").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/chatroom").permitAll()
                         .anyRequest().authenticated()
 
         );
