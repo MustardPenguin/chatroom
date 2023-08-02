@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../services/account.service';
 import { ChatroomService } from '../services/chatroom.service';
+import { chatroom } from '../interface/chatroom';
+
 
 @Component({
   selector: 'app-home',
@@ -14,6 +16,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
       this.authenticated = this.accountService.authenticated;
-      this.chatroomService.getRequestChatroom();
+      this.chatroomService.getChatrooms();
+  }
+
+  getRooms(): chatroom[] {
+    return this.chatroomService.chatrooms;
   }
 }
