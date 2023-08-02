@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ChatroomRepository extends JpaRepository<Chatroom, Integer> {
 
-    @Query(value = "SELECT * FROM chatroom ORDER BY date_created", nativeQuery = true)
-    List<Chatroom> getChatroomsByDateCreated();
+    @Query(value = "SELECT * FROM chatroom ORDER BY id DESC", nativeQuery = true)
+    List<Chatroom> findAllOrderedByIdDesc();
 }

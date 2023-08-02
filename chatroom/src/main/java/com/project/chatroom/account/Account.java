@@ -29,7 +29,8 @@ public class Account implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany
+    @OneToMany()
+    @JsonIgnore
     private Set<Chatroom> ownedRooms;
 
     @OneToMany(mappedBy = "account")

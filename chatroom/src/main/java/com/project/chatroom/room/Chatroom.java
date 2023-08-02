@@ -37,10 +37,11 @@ public class Chatroom {
 
     }
 
-    public Chatroom(Integer id, String name, LocalDate dateCreated) {
+    public Chatroom(Integer id, String name, LocalDate dateCreated, Account owner) {
         this.id = id;
         this.name = name;
         this.dateCreated = dateCreated;
+        this.owner = owner;
     }
 
     public Integer getId() {
@@ -75,7 +76,15 @@ public class Chatroom {
         this.messages = messages;
     }
 
-//    public List<Account> getAccounts() {
+    public Account getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Account owner) {
+        this.owner = owner;
+    }
+
+    //    public List<Account> getAccounts() {
 //        return accounts;
 //    }
 //
