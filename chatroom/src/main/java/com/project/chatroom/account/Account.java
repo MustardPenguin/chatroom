@@ -1,5 +1,6 @@
 package com.project.chatroom.account;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.chatroom.message.Message;
 import com.project.chatroom.room.Chatroom;
@@ -29,22 +30,23 @@ public class Account implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany()
-    @JsonIgnore
+    @OneToMany(mappedBy = "owner")
+//    @JsonIgnore
+    @JsonBackReference
     private Set<Chatroom> ownedRooms;
 
-    @OneToMany(mappedBy = "account")
-    @JsonIgnore
-    private List<Message> messages;
+//    @OneToMany(mappedBy = "account")
+//    @JsonIgnore
+//    private List<Message> messages;
 
-    @ManyToMany
-    @JsonIgnore
-    @JoinTable(
-            name = "account_chatroom",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "chatroom_id")
-    )
-    private Set<Chatroom> chatrooms;
+//    @ManyToMany
+//    @JsonIgnore
+//    @JoinTable(
+//            name = "account_chatroom",
+//            joinColumns = @JoinColumn(name = "account_id"),
+//            inverseJoinColumns = @JoinColumn(name = "chatroom_id")
+//    )
+//    private Set<Chatroom> chatrooms;
 
     public Account() {
 
@@ -85,6 +87,14 @@ public class Account implements UserDetails {
         this.role = role;
     }
 
+    public Set<Chatroom> getOwnedRooms() {
+        return ownedRooms;
+    }
+
+    public void setOwnedRooms(Set<Chatroom> ownedRooms) {
+        this.ownedRooms = ownedRooms;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -113,6 +123,8 @@ public class Account implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -12,8 +12,6 @@ import java.util.Set;
 
 @Entity
 public class Chatroom {
-
-
     @Id
     @GeneratedValue
     private Integer id;
@@ -23,15 +21,16 @@ public class Chatroom {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate dateCreated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Account owner;
 
-    @OneToMany(mappedBy = "chatroom")
-    @JsonIgnore
-    private List<Message> messages;
-
-    @ManyToMany(mappedBy = "chatrooms")
-    private Set<Account> accounts;
+//    @OneToMany(mappedBy = "chatroom")
+//    @JsonIgnore
+//    private List<Message> messages;
+//
+//    @ManyToMany(mappedBy = "chatrooms")
+//    private Set<Account> accounts;
 
     public Chatroom() {
 
@@ -68,13 +67,13 @@ public class Chatroom {
         this.dateCreated = dateCreated;
     }
 
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
+//    public List<Message> getMessages() {
+//        return messages;
+//    }
+//
+//    public void setMessages(List<Message> messages) {
+//        this.messages = messages;
+//    }
 
     public Account getOwner() {
         return owner;
@@ -84,11 +83,11 @@ public class Chatroom {
         this.owner = owner;
     }
 
-    //    public List<Account> getAccounts() {
+//    public Set<Account> getAccounts() {
 //        return accounts;
 //    }
 //
-//    public void setAccounts(List<Account> accounts) {
+//    public void setAccounts(Set<Account> accounts) {
 //        this.accounts = accounts;
 //    }
 }

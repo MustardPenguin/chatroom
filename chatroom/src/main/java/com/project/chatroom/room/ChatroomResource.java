@@ -38,8 +38,11 @@ public class ChatroomResource {
         Optional<Account> account = accountRepository.findByUsername(authentication.getName());
         if(account.isPresent()) {
             Chatroom chatroom =  new Chatroom(null, chatroomRequestBody.getName(), LocalDate.now(), account.get());
+//            chatroom.getAccounts().add(account.get());
+//            System.out.println(chatroom.getAccounts());
 
             chatroomRepository.save(chatroom);
+
             return new ResponseEntity<>("Successfully created room", HttpStatus.CREATED);
         } else {
             throw new UsernameNotFoundException("User not found");

@@ -31,7 +31,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers("/login", "/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/chatroom").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/chatroom", "/users").permitAll()
                         .anyRequest().authenticated()
 
         );
@@ -45,6 +45,7 @@ public class SecurityConfiguration {
         );
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         http.authenticationProvider(authenticationProvider);
 //        http.oauth2ResourceServer(auth -> auth.jwt(Customizer.withDefaults()));
 

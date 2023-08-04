@@ -2,6 +2,7 @@ package com.project.chatroom.account;
 
 import com.project.chatroom.jwt.JwtResponse;
 import com.project.chatroom.jwt.JwtTokenService;
+import com.project.chatroom.room.Chatroom;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +15,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 public class AccountResource {
@@ -84,5 +84,15 @@ public class AccountResource {
         accountRepository.save(account);
 
         return new ResponseEntity<String>("Successfully created account", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users/{username}/CreatedChatrooms")
+    public Set<Chatroom> getCreatedChatrooms(@PathVariable String username) {
+        Optional<Account> account = accountRepository.findByUsername(username);
+        if(account.isPresent()) {
+            return account.get().getOwnedRooms();
+        } else {
+            throw new UsernameNotFoundException("User not found.");
+        }
     }
 }
