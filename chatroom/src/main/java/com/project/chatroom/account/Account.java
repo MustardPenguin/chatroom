@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,8 +21,10 @@ public class Account implements UserDetails {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     private Integer id;
 
+    @JsonIgnore
     private String username;
 
     @JsonIgnore
@@ -39,14 +42,14 @@ public class Account implements UserDetails {
 //    @JsonIgnore
 //    private List<Message> messages;
 
-//    @ManyToMany
-//    @JsonIgnore
-//    @JoinTable(
-//            name = "account_chatroom",
-//            joinColumns = @JoinColumn(name = "account_id"),
-//            inverseJoinColumns = @JoinColumn(name = "chatroom_id")
-//    )
-//    private Set<Chatroom> chatrooms;
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "account_chatroom",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "chatroom_id")
+    )
+    private Set<Chatroom> chatrooms;
 
     public Account() {
 
@@ -57,6 +60,7 @@ public class Account implements UserDetails {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.chatrooms = new HashSet<>();
     }
 
     public Integer getId() {
@@ -93,6 +97,14 @@ public class Account implements UserDetails {
 
     public void setOwnedRooms(Set<Chatroom> ownedRooms) {
         this.ownedRooms = ownedRooms;
+    }
+
+    public Set<Chatroom> getChatrooms() {
+        return chatrooms;
+    }
+
+    public void setChatrooms(Set<Chatroom> chatrooms) {
+        this.chatrooms = chatrooms;
     }
 
     @Override

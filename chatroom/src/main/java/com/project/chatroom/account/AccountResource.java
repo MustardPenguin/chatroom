@@ -95,4 +95,9 @@ public class AccountResource {
             throw new UsernameNotFoundException("User not found.");
         }
     }
+
+    @GetMapping("/users/{username}/chatrooms")
+    public void getChatrooms(@PathVariable String username) {
+
+    }
 }

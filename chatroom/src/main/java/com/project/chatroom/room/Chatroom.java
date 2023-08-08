@@ -7,6 +7,7 @@ import com.project.chatroom.message.Message;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class Chatroom {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate dateCreated;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JsonIgnore
     private Account owner;
 
@@ -29,8 +30,9 @@ public class Chatroom {
 //    @JsonIgnore
 //    private List<Message> messages;
 //
-//    @ManyToMany(mappedBy = "chatrooms")
-//    private Set<Account> accounts;
+    @ManyToMany(mappedBy = "chatrooms")
+    @JsonIgnore
+    private Set<Account> accounts;
 
     public Chatroom() {
 
@@ -41,6 +43,9 @@ public class Chatroom {
         this.name = name;
         this.dateCreated = dateCreated;
         this.owner = owner;
+        this.accounts = new HashSet<>();
+        this.accounts.add(owner);
+        owner.getChatrooms().add(this);
     }
 
     public Integer getId() {
@@ -83,11 +88,11 @@ public class Chatroom {
         this.owner = owner;
     }
 
-//    public Set<Account> getAccounts() {
-//        return accounts;
-//    }
-//
-//    public void setAccounts(Set<Account> accounts) {
-//        this.accounts = accounts;
-//    }
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
 }
