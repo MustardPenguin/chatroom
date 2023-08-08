@@ -13,19 +13,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class ChatroomResource {
 
     private final ChatroomRepository chatroomRepository;
     private final AccountRepository accountRepository;
+    private final ChatroomUtil chatroomUtil;
 
-    public ChatroomResource(ChatroomRepository chatroomRepository, AccountRepository accountRepository) {
+    public ChatroomResource(ChatroomRepository chatroomRepository, AccountRepository accountRepository, ChatroomUtil chatroomUtil) {
         this.chatroomRepository = chatroomRepository;
         this.accountRepository = accountRepository;
+        this.chatroomUtil = chatroomUtil;
     }
 
     @PostMapping("/chatroom")
@@ -46,11 +46,12 @@ public class ChatroomResource {
     }
 
     @GetMapping("/chatroom")
-    public List<Chatroom> getRooms() {
+    public ResponseEntity<Set<ChatroomResponse>> getRooms() {
 
         List<Chatroom> chatrooms = chatroomRepository.findAllOrderedByIdDesc();
+        Set<ChatroomResponse> chatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(chatrooms);
 
-        return chatrooms;
+        return new ResponseEntity<>(chatroomResponses, HttpStatus.OK);
     }
 
     @GetMapping("/chatroom/{id}")

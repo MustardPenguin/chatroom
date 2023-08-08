@@ -3,6 +3,8 @@ package com.project.chatroom.account;
 import com.project.chatroom.jwt.JwtResponse;
 import com.project.chatroom.jwt.JwtTokenService;
 import com.project.chatroom.room.Chatroom;
+import com.project.chatroom.room.ChatroomResponse;
+import com.project.chatroom.room.ChatroomUtil;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class AccountResource {
@@ -28,13 +27,15 @@ public class AccountResource {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
+    private final ChatroomUtil chatroomUtil;
 
     Logger logger = LoggerFactory.getLogger(AccountResource.class);
-    public AccountResource(AccountRepository accountRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenService jwtTokenService) {
+    public AccountResource(AccountRepository accountRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenService jwtTokenService, ChatroomUtil chatroomUtil) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
+        this.chatroomUtil = chatroomUtil;
     }
 
     @PostMapping("/login")
@@ -87,10 +88,13 @@ public class AccountResource {
     }
 
     @GetMapping("/users/{username}/CreatedChatrooms")
-    public Set<Chatroom> getCreatedChatrooms(@PathVariable String username) {
+    public ResponseEntity<Set<ChatroomResponse>> getCreatedChatrooms(@PathVariable String username) {
         Optional<Account> account = accountRepository.findByUsername(username);
         if(account.isPresent()) {
-            return account.get().getOwnedRooms();
+            Set<Chatroom> ownedRooms = account.get().getOwnedRooms();
+            Set<ChatroomResponse> ownedChatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(ownedRooms);
+
+            return new ResponseEntity<>(ownedChatroomResponses, HttpStatus.OK);
         } else {
             throw new UsernameNotFoundException("User not found.");
         }
