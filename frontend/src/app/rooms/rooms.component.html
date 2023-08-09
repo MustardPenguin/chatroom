@@ -16,6 +16,8 @@
                         <div class="self-center text-2xl">{{room.name}}</div>
                         <button
                         class="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded px-2 py-2"
+                        (click)="joinRoom($event)"
+                        [value]="room.id"
                         >Join {{room.members && room.members || "?"}} others</button>
                     </div>
                 </div>

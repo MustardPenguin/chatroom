@@ -49,4 +49,8 @@ export class ApiService {
 
     });
   }
+
+  joinChatroom(id: number) {
+    return api.post(`/chatroom/${id}`, {}, {})
+  }
 }

@@ -21,7 +21,7 @@ export class ChatroomService {
     return this.chatrooms;
   }
 
-  async getRequestChatroom(): Promise<chatroom[]> {
+  async getRequestChatroom(){
     const getRequest = (): Promise<chatroom[]> => this.apiService.getChatrooms()
       .then(response => {
         console.log(response);
@@ -36,5 +36,14 @@ export class ChatroomService {
     const response = await getRequest();
     console.log(response);
     return response;
+  }
+
+  joinRoom(id: number) {
+    this.apiService.joinChatroom(id)
+      .then(response => {
+        console.log(response);
+      }).catch(err => {
+        console.log(err);
+      })
   }
 }

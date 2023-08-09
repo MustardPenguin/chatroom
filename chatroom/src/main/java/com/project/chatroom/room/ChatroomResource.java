@@ -61,17 +61,31 @@ public class ChatroomResource {
         if(optionalChatroom.isPresent()) {
             Chatroom chatroom = optionalChatroom.get();
             List<Account> members = accountRepository.findAccountsByChatroomsId(id);
-            System.out.println(members);
             ChatroomResponse chatroomResponse = new ChatroomResponse(chatroom, members.size());
             return new ResponseEntity<>(chatroomResponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+    }
 
-//        return optionalChatroom.map(chatroom ->
-//                    new ResponseEntity<>(new ChatroomResponse(chatroom, 0), HttpStatus.OK)
-//                ).orElseGet(() ->
-//                        new ResponseEntity<>(null, HttpStatus.NOT_FOUND)
-//                );
+    @PostMapping("/chatroom/{id}")
+    public ResponseEntity<String> joinRoom(@PathVariable Integer id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Optional<Chatroom> optionalChatroom = chatroomRepository.findById(id);
+        Optional<Account> optionalAccount = accountRepository.findByUsername(authentication.getName());
+        Account account;
+        if(optionalAccount.isPresent()) {
+            account = optionalAccount.get();
+        } else {
+            return new ResponseEntity<>("Error retrieving account data", HttpStatus.NOT_FOUND);
+        }
+
+        return optionalChatroom.map(chatroom -> {
+            chatroom.getAccounts().add(account);
+            account.getChatrooms().add(chatroom);
+            accountRepository.save(account);
+            return new ResponseEntity<>("Joined room", HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>("Chatroom not found", HttpStatus.NOT_FOUND));
     }
 }
