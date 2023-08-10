@@ -6,9 +6,7 @@ import { AccountService } from '../services/account.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
-  authenticated: boolean = false;
-
+export class HeaderComponent {
   constructor(private accountService: AccountService) {}
 
   isAuthenticated(): boolean {
@@ -19,7 +17,4 @@ export class HeaderComponent implements OnInit {
     this.accountService.logOut();
   }
 
-  ngOnInit(): void {
-      this.authenticated = this.accountService.authenticated;
-  }
 }
