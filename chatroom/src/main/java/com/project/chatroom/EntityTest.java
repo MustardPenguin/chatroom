@@ -42,6 +42,17 @@ public class EntityTest {
         addChatroom("Cool room", account);
         addChatroom("Room test", account);
         addChatroom("Cats!", account);
+        addChatroom("Room 4", account);
+        addChatroom("Room number 5", account);
+        addChatroom("Pagination stuff", account);
+        addChatroom("More rooms!", account);
+        addChatroom("Dogs!", account);
+        addChatroom("10 rooms at least", account);
+        addChatroom("Rock and stone!", account);
+        addChatroom("Oneorangebraincell", account);
+        addChatroom("12222", account);
+        addChatroom("Food", account);
+        addChatroom("Name", account);
 
         accountRepository.save(account);
     }

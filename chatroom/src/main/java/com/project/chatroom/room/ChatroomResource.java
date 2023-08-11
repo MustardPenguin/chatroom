@@ -4,6 +4,8 @@ import com.project.chatroom.account.Account;
 import com.project.chatroom.account.AccountRepository;
 import com.project.chatroom.account.Role;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,11 +46,11 @@ public class ChatroomResource {
             throw new UsernameNotFoundException("User not found");
         }
     }
-
     @GetMapping("/chatroom")
-    public ResponseEntity<Set<ChatroomResponse>> getRooms() {
-
-        List<Chatroom> chatrooms = chatroomRepository.findAllOrderedByIdDesc();
+    public ResponseEntity<Set<ChatroomResponse>> getRooms(@RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+//        List<Chatroom> chatrooms = chatroomRepository.findAllOrderedByIdDesc();
+        List<Chatroom> chatrooms = chatroomRepository.findChatroomByOwnerNotNullOrderByIdDesc(pageable);
         Set<ChatroomResponse> chatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(chatrooms);
 
         return new ResponseEntity<>(chatroomResponses, HttpStatus.OK);
