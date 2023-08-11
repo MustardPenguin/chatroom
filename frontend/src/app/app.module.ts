@@ -9,6 +9,7 @@ import { RoomsComponent } from './rooms/rooms.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { CreateRoomComponent } from './create-room/create-room.component';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { CreateRoomComponent } from './create-room/create-room.component';
     RoomsComponent,
     LoginComponent,
     CreateRoomComponent,
+    PaginationComponent,
   ],
   imports: [
     BrowserModule,

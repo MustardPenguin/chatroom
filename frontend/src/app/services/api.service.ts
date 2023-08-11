@@ -44,8 +44,9 @@ export class ApiService {
     })
   };
 
-  getChatrooms() {
-    return api.get("/chatroom", {
+  getChatrooms(page: number) {
+    const URIQuery = `?page=${page}`;
+    return api.get(`/chatroom${URIQuery}`, {
 
     });
   }

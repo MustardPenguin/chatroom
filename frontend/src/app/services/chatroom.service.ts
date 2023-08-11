@@ -7,22 +7,12 @@ import { ApiService } from './api.service';
 })
 export class ChatroomService {
 
-  chatrooms: chatroom[] = [
-
-  ];
+  chatrooms: chatroom[] = [];
 
   constructor(private apiService: ApiService) {}
 
-  async getChatrooms() {
-    this.chatrooms = [];
-    const chatrooms = await this.getRequestChatroom();
-    this.chatrooms = chatrooms;
-    
-    return this.chatrooms;
-  }
-
-  async getRequestChatroom(){
-    const getRequest = (): Promise<chatroom[]> => this.apiService.getChatrooms()
+  async getChatrooms(page: number) {
+    const getRequest = (): Promise<chatroom[]> => this.apiService.getChatrooms(page)
       .then(response => {
         console.log(response);
         const chatrooms: chatroom[] = response.data;
@@ -34,7 +24,6 @@ export class ChatroomService {
       });
     
     const response = await getRequest();
-    console.log(response);
     return response;
   }
 

@@ -13,7 +13,7 @@ export class RoomsComponent {
   constructor(private accountService: AccountService, private chatroomService: ChatroomService, private router: Router) {}
 
   ngOnInit(): void {
-      this.chatroomService.getChatrooms();
+      // this.chatroomService.getChatrooms();
   }
 
   getRooms(): chatroom[] {

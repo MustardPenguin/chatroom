@@ -20,10 +20,14 @@
                 </button>
 
                 <div *ngIf="!authenticated" class="flex justify-evenly text-xl font-bold mt-5 mb-5 ">
-                    <button class="home-btn border-amber-600 border-b-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded mx-3 mt-5 self-center">Created rooms</button>
-                    <button class="home-btn border-amber-600 border-b-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded mx-3 mt-5 self-center">Joined rooms</button>
+                    <button value="created"
+                    class="home-btn border-amber-600 border-b-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded mx-3 mt-5 self-center">Created rooms</button>
+                    <button value="joined"
+                    class="home-btn border-amber-600 border-b-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded mx-3 mt-5 self-center">Joined rooms</button>
                     
                 </div>
+
+                <app-pagination />
 
                 <!-- <div>
                     <div *ngFor="let room of getRooms()" class="flex justify-between px-10 py-2 mb-2">

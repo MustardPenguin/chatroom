@@ -5,12 +5,13 @@
                 
                 <div class="self-center text-4xl font-bold">Home</div>
                 
-                <div class="mt-6 self-center text-2xl">
+                <div class="mt-6 self-center text-2xl font-bold underline mb-4">
                     Currently active rooms
                 </div>
 
-                <div class="flex justify-center text-2xl font-bold mt-5 mb-5">List of created rooms</div>
-                <div>
+                <app-pagination />
+                
+                <!-- <div>
                     <div *ngFor="let room of getRooms()" class="flex justify-between px-10 py-2 mb-2">
                         <div class="self-center text-2xl font-bold">{{room.id}}</div>
                         <div class="self-center text-2xl">{{room.name}}</div>
@@ -20,7 +21,7 @@
                         [value]="room.id"
                         >Join {{room.members && room.members || "?"}} others</button>
                     </div>
-                </div>
+                </div> -->
             </div>
 
         </div>
