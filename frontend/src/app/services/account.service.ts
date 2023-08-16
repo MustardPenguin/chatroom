@@ -8,6 +8,7 @@ import { ApiService } from './api.service';
 export class AccountService {
   authenticated: boolean = false;
   token: string = "";
+  username: string = "";
   
   constructor(private apiService: ApiService, private router: Router) { }
 
@@ -21,6 +22,7 @@ export class AccountService {
           window.alert(response.data.token);
         } else {
           this.token = response.data.token;
+          this.username = response.data.username;
           this.authenticated = true;
           this.apiService.updateAuthorizationHeaders(this.token);
           this.router.navigate(["home"]);

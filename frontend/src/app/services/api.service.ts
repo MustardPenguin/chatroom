@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosResponse, AxiosStatic } from 'axios';
+import { AccountService } from './account.service';
 
 const api = axios.create({
   baseURL: "http://localhost:8080"
@@ -39,16 +40,17 @@ export class ApiService {
   }
 
   getTest() {
-    return api.get('/test', {
-      
-    })
+    return api.get('/test', {})
   };
 
   getChatrooms(page: number) {
     const URIQuery = `?page=${page}`;
-    return api.get(`/chatroom${URIQuery}`, {
+    return api.get(`/chatroom${URIQuery}`, {});
+  }
 
-    });
+  getOwnedChatrooms(page: number, username: string) {
+    const URIQuery = `?page=${page}`;
+    return api.get(`/users/${username}/CreatedChatrooms`, {});
   }
 
   joinChatroom(id: number) {

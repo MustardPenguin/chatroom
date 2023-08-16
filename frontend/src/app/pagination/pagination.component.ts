@@ -1,8 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import { ChatroomService } from '../services/chatroom.service';
 import { ApiService } from '../services/api.service';
 import { chatroom } from '../interface/chatroom';
 import { NumberValueAccessor } from '@angular/forms';
+import { AxiosResponse } from 'axios';
+import { AccountService } from '../services/account.service';
 
 @Component({
   selector: 'app-pagination',
@@ -12,12 +14,14 @@ import { NumberValueAccessor } from '@angular/forms';
 export class PaginationComponent implements OnInit, AfterViewInit {
   chatrooms: chatroom[] = [];
   page: number = 0;
+  @Input() pageType: string = "rooms";
 
   constructor(
     private chatroomService: ChatroomService,
     private apiService: ApiService,
     private renderer: Renderer2,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
@@ -39,9 +43,12 @@ export class PaginationComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getRooms(page: number): void {
-    const chatrooms = this.chatroomService.getChatrooms(page);
+  getRooms(page: number, apiFunction?: Function): void {
+    // const chatrooms = this.chatroomService.getChatrooms(page);
+    const chatrooms = this.getApiFunction(page);
+    
     chatrooms.then(response => {
+      console.log(response);
       if(response.length > 0) {
         this.setRooms(response);
         this.page = page;
@@ -50,6 +57,18 @@ export class PaginationComponent implements OnInit, AfterViewInit {
       console.log(err);
       this.chatrooms = [];
     })
+  }
+
+  getApiFunction(page: number) {
+    switch(this.pageType) {
+      case "rooms":
+        return this.chatroomService.getChatrooms(page);
+      case "created":
+        return this.chatroomService.getOwnedChatrooms(page, this.accountService.username);
+      case "joined":
+        return this.chatroomService.getChatrooms(page);
+    }
+    return this.chatroomService.getChatrooms(page);
   }
 
   setRooms(chatrooms: chatroom[]): void {

@@ -7,7 +7,7 @@
                 
                 <div class="mt-6 self-center text-2xl">
                     {{authenticated ?
-                        "Welcome username" : 
+                        "Welcome " + username : 
                         "Please log in to view your chatrooms."
                     }}
                 </div>
@@ -19,27 +19,16 @@
                     Create a chatroom
                 </button>
 
-                <div *ngIf="!authenticated" class="flex justify-evenly text-xl font-bold mt-5 mb-5 ">
+                <div *ngIf="authenticated" class="flex justify-evenly text-xl font-bold mt-5 mb-5 ">
                     <button value="created"
                     class="home-btn border-amber-600 border-b-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded mx-3 mt-5 self-center">Created rooms</button>
                     <button value="joined"
                     class="home-btn border-amber-600 border-b-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded mx-3 mt-5 self-center">Joined rooms</button>
-                    
                 </div>
 
-                <app-pagination />
-
-                <!-- <div>
-                    <div *ngFor="let room of getRooms()" class="flex justify-between px-10 py-2 mb-2">
-                        <div class="self-center text-2xl font-bold">{{room.id}}</div>
-                        <div class="self-center text-2xl">{{room.name}}</div>
-                        <button
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded px-2 py-2"
-                        >Join {{room.members && room.members || "?"}} others</button>
-                    </div>
-                </div> -->
+                <app-pagination *ngIf="currentList === 'created'" pageType="created"></app-pagination>
+                <app-pagination *ngIf="currentList === 'joined'" pageType="joined"></app-pagination>
             </div>
-
         </div>
     </div>
 </div>

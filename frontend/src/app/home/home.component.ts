@@ -12,6 +12,7 @@ import { chatroom } from '../interface/chatroom';
 export class HomeComponent implements OnInit, AfterViewInit {
   authenticated: boolean = false;
   currentList: string = "created";
+  username: string = "";
 
   constructor(
     private accountService: AccountService, 
@@ -21,6 +22,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
       this.authenticated = this.accountService.authenticated;
+      this.username = this.accountService.username;
       // this.chatroomService.getChatrooms();
   }
 
@@ -31,7 +33,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         element.addEventListener('click', () => {
           const attribute = element.getAttribute("value");
           
-          console.log(attribute);
+          this.currentList = attribute || this.currentList;
+          console.log(this.currentList);
         });
       });
       

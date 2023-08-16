@@ -27,6 +27,22 @@ export class ChatroomService {
     return response;
   }
 
+  async getOwnedChatrooms(page: number, username: string) {
+    const getRequest = (): Promise<chatroom[]> => this.apiService.getOwnedChatrooms(page, username)
+      .then(response => {
+        console.log(response);
+        const chatrooms: chatroom[] = response.data;
+        return chatrooms;
+      })
+      .catch(err => {
+        console.log(err);
+        return [];
+      });
+
+      const response = await getRequest();
+      return response;
+  }
+
   joinRoom(id: number) {
     this.apiService.joinChatroom(id)
       .then(response => {
