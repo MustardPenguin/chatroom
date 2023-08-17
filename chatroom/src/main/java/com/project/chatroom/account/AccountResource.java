@@ -30,6 +30,7 @@ public class AccountResource {
     private final ChatroomUtil chatroomUtil;
 
     Logger logger = LoggerFactory.getLogger(AccountResource.class);
+
     public AccountResource(AccountRepository accountRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenService jwtTokenService, ChatroomUtil chatroomUtil) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
@@ -47,30 +48,30 @@ public class AccountResource {
                             accountRequestBody.getPassword()
                     )
             );
-        } catch(AuthenticationException authenticationException) {
+        } catch (AuthenticationException authenticationException) {
 //            throw new UsernameNotFoundException("Incorrect credentials");
-            return new JwtResponse("Error: Incorrect credentials");
+            return new JwtResponse("Error: Incorrect credentials", "");
         }
 
         Account account = accountRepository.findByUsername(accountRequestBody.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
         String jwtToken = jwtTokenService.generateToken(account);
-        return new JwtResponse(jwtToken);
+        return new JwtResponse(jwtToken, account.getUsername());
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid AccountRequestBody accountRequestBody, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<String>();
-            for(FieldError fieldError: bindingResult.getFieldErrors()) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 errors.add(fieldError.getDefaultMessage());
             }
             return ResponseEntity.badRequest().body(errors.toString());
         }
 
         Optional<Account> findUser = accountRepository.findByUsername(accountRequestBody.getUsername());
-        if(findUser.isPresent()) {
+        if (findUser.isPresent()) {
             return new ResponseEntity<String>("Username already exists", HttpStatus.BAD_REQUEST);
         }
 
@@ -85,23 +86,5 @@ public class AccountResource {
         accountRepository.save(account);
 
         return new ResponseEntity<String>("Successfully created account", HttpStatus.CREATED);
-    }
-
-    @GetMapping("/users/{username}/CreatedChatrooms")
-    public ResponseEntity<Set<ChatroomResponse>> getCreatedChatrooms(@PathVariable String username) {
-        Optional<Account> account = accountRepository.findByUsername(username);
-        if(account.isPresent()) {
-            Set<Chatroom> ownedRooms = account.get().getOwnedRooms();
-            Set<ChatroomResponse> ownedChatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(ownedRooms);
-
-            return new ResponseEntity<>(ownedChatroomResponses, HttpStatus.OK);
-        } else {
-            throw new UsernameNotFoundException("User not found.");
-        }
-    }
-
-    @GetMapping("/users/{username}/chatrooms")
-    public void getChatrooms(@PathVariable String username) {
-
     }
 }

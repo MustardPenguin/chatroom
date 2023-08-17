@@ -15,4 +15,8 @@ public interface ChatroomRepository extends JpaRepository<Chatroom, Integer> {
     List<Chatroom> findAllOrderedByIdDesc();
 
     List<Chatroom> findChatroomByOwnerNotNullOrderByIdDesc(Pageable pageable);
+
+    List<Chatroom> findByOwnerOrderByIdDesc(Account account, Pageable pageable);
+
+    List<Chatroom> findChatroomsByAccounts_Id(Integer accounts_id, Pageable pageable);
 }

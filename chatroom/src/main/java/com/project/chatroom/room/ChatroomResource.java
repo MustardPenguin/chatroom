@@ -4,6 +4,9 @@ import com.project.chatroom.account.Account;
 import com.project.chatroom.account.AccountRepository;
 import com.project.chatroom.account.Role;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class ChatroomResource {
@@ -23,6 +27,10 @@ public class ChatroomResource {
     private final ChatroomRepository chatroomRepository;
     private final AccountRepository accountRepository;
     private final ChatroomUtil chatroomUtil;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private final int MAX_CHATROOM_PER_USER = 15;
+    private final int RESULTS_PER_PAGE = 10;
 
     public ChatroomResource(ChatroomRepository chatroomRepository, AccountRepository accountRepository, ChatroomUtil chatroomUtil) {
         this.chatroomRepository = chatroomRepository;
@@ -36,9 +44,13 @@ public class ChatroomResource {
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<Account> account = accountRepository.findByUsername(authentication.getName());
-        if(account.isPresent()) {
-            Chatroom chatroom =  new Chatroom(null, chatroomRequestBody.getName(), LocalDate.now(), account.get());
 
+        if(account.isPresent()) {
+            if(account.get().getOwnedRooms().size() >= MAX_CHATROOM_PER_USER) {
+                return new ResponseEntity<>("You can not create more than 15 rooms. Please delete some before creating one.", HttpStatus.BAD_REQUEST);
+            }
+            Chatroom chatroom =  new Chatroom(null, chatroomRequestBody.getName(), LocalDate.now(), account.get());
+            logger.info(account.get().toString());
             chatroomRepository.save(chatroom);
             accountRepository.save(account.get());
             return new ResponseEntity<>("Successfully created room", HttpStatus.CREATED);
@@ -48,7 +60,7 @@ public class ChatroomResource {
     }
     @GetMapping("/chatroom")
     public ResponseEntity<Set<ChatroomResponse>> getRooms(@RequestParam int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, RESULTS_PER_PAGE);
 //        List<Chatroom> chatrooms = chatroomRepository.findAllOrderedByIdDesc();
         List<Chatroom> chatrooms = chatroomRepository.findChatroomByOwnerNotNullOrderByIdDesc(pageable);
         Set<ChatroomResponse> chatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(chatrooms);
@@ -77,6 +89,7 @@ public class ChatroomResource {
         Optional<Chatroom> optionalChatroom = chatroomRepository.findById(id);
         Optional<Account> optionalAccount = accountRepository.findByUsername(authentication.getName());
         Account account;
+
         if(optionalAccount.isPresent()) {
             account = optionalAccount.get();
         } else {
@@ -89,5 +102,28 @@ public class ChatroomResource {
             accountRepository.save(account);
             return new ResponseEntity<>("Joined room", HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>("Chatroom not found", HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/users/{username}/CreatedChatrooms")
+    public ResponseEntity<Set<ChatroomResponse>> getCreatedChatrooms(@PathVariable String username, @RequestParam int page) {
+        Optional<Account> account = accountRepository.findByUsername(username);
+        if(account.isPresent()) {
+            Pageable pageable = PageRequest.of(page, RESULTS_PER_PAGE);
+            List<Chatroom> ownedChatrooms = chatroomRepository.findByOwnerOrderByIdDesc(account.get(), pageable);
+            Set<ChatroomResponse> ownedChatroomsResponse = chatroomUtil.convertChatroomToChatroomResponse(ownedChatrooms);
+            return new ResponseEntity<>(ownedChatroomsResponse, HttpStatus.OK);
+        } else {
+            throw new UsernameNotFoundException("User not found.");
+        }
+    }
+
+    @GetMapping("/users/{username}/chatrooms")
+    public ResponseEntity<Set<ChatroomResponse>> getChatrooms(@PathVariable String username, @RequestParam int page) {
+        Account account = accountRepository.findByUsername(username).orElse(null);
+        if(account == null) { throw new UsernameNotFoundException("User not found"); }
+        Pageable pageable = PageRequest.of(page, RESULTS_PER_PAGE);
+        List<Chatroom> chatrooms = chatroomRepository.findChatroomsByAccounts_Id(account.getId(), pageable);
+        Set<ChatroomResponse> chatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(chatrooms);
+        return new ResponseEntity<>(chatroomResponses, HttpStatus.OK);
     }
 }
