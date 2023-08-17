@@ -50,7 +50,12 @@ export class ApiService {
 
   getOwnedChatrooms(page: number, username: string) {
     const URIQuery = `?page=${page}`;
-    return api.get(`/users/${username}/CreatedChatrooms`, {});
+    return api.get(`/users/${username}/CreatedChatrooms${URIQuery}`, {});
+  }
+
+  getJoinedChatrooms(page: number, username: string) {
+    const URIQuery = `?page=${page}`;
+    return api.get(`/users/${username}/chatrooms`, {});
   }
 
   joinChatroom(id: number) {

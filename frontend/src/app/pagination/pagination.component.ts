@@ -25,6 +25,9 @@ export class PaginationComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    if(this.pageType !== "rooms" && !this.accountService.authenticated) {
+      return;
+    }
     this.getRooms(0);
   }
 
@@ -66,7 +69,7 @@ export class PaginationComponent implements OnInit, AfterViewInit {
       case "created":
         return this.chatroomService.getOwnedChatrooms(page, this.accountService.username);
       case "joined":
-        return this.chatroomService.getChatrooms(page);
+        return this.chatroomService.getJoinedChatrooms(page, this.accountService.username);
     }
     return this.chatroomService.getChatrooms(page);
   }

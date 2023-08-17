@@ -28,7 +28,7 @@ export class CreateRoomComponent {
       })
       .catch(err => {
         console.log(err);
-        window.alert('Error');
+        window.alert(err.response.data);
       });
   }
 

@@ -37,6 +37,7 @@ export class AccountService {
     console.log('logout');
     this.authenticated = false;
     this.token = "";
+    this.apiService.updateAuthorizationHeaders(this.token);
   }
 
   register(username: string, password: string): void {
