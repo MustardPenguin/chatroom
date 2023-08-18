@@ -124,6 +124,7 @@ public class ChatroomResource {
         Pageable pageable = PageRequest.of(page, RESULTS_PER_PAGE);
         List<Chatroom> chatrooms = chatroomRepository.findChatroomsByAccounts_Id(account.getId(), pageable);
         Set<ChatroomResponse> chatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(chatrooms);
+
         return new ResponseEntity<>(chatroomResponses, HttpStatus.OK);
     }
 }

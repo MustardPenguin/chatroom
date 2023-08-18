@@ -1,19 +1,24 @@
 
 <div class="flex-col align-center">
     <div>
-        <div class="flex justify-between px-10 py-2 mb-2">
+        <!-- <div class="flex justify-between px-10 py-2 mb-2">
             <div class="self-center text-2xl">Id</div>
             <div class="self-center text-2xl mr-28">Name</div>
             <div></div>
-        </div>
+        </div> -->
         <div *ngFor="let room of chatrooms" class="flex justify-between px-10 py-2 mb-2">
             <div class="self-center text-2xl font-bold">{{room.id}}</div>
             <div class="self-center text-2xl">{{room.name}}</div>
             <button
                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded px-2 py-2"
-                
+                (click)="joinRoom($event)"
                 [value]="room.id"
                 >Join {{room.members && room.members || "?"}} others
+            </button>
+            <button *ngIf="pageType === 'created'"
+            class="bg-red-500 hover:bg-red-600 text-white font-bold rounded px-2 py-2"
+            >
+                Delete
             </button>
         </div>
     </div>

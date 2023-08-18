@@ -44,7 +44,7 @@ export class ChatroomService {
   }
 
   async getJoinedChatrooms(page: number, username: string) {
-    const getRequest = (): Promise<chatroom[]> => this.apiService.getOwnedChatrooms(page, username)
+    const getRequest = (): Promise<chatroom[]> => this.apiService.getJoinedChatrooms(page, username)
       .then(response => {
         console.log(response);
         const chatrooms: chatroom[] = response.data;

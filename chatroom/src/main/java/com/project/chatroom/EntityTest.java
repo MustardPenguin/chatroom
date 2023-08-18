@@ -35,6 +35,7 @@ public class EntityTest {
     @Bean
     public void initialize() {
         Account account = addAccount("thedog", "thecat");
+        addAccount("thecat", "thedog");
 
         String token = jwtTokenService.generateToken(account);
         logger.info("Bearer " + token);

@@ -5,6 +5,7 @@ import { chatroom } from '../interface/chatroom';
 import { NumberValueAccessor } from '@angular/forms';
 import { AxiosResponse } from 'axios';
 import { AccountService } from '../services/account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pagination',
@@ -21,7 +22,8 @@ export class PaginationComponent implements OnInit, AfterViewInit {
     private apiService: ApiService,
     private renderer: Renderer2,
     private elementRef: ElementRef,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -83,5 +85,18 @@ export class PaginationComponent implements OnInit, AfterViewInit {
     this.chatrooms.sort((roomA, roomB) => {
       return roomA.id < roomB.id ? 1 : -1;
     })
+  }
+
+  joinRoom(e: Event): void {
+    e.preventDefault();
+    if(!this.accountService.authenticated) {
+      window.alert("Please login first");
+      this.router.navigate(["/login"]);
+      return;
+    }
+    const id = +((e.target as Element).getAttribute("value") || -1);
+    console.log(id);
+    
+    this.chatroomService.joinRoom(id);
   }
 }
