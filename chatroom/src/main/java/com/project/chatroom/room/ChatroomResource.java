@@ -137,7 +137,9 @@ public class ChatroomResource {
         logger.info(authentication.toString());
         Optional<Account> optionalAccount = accountRepository.findByUsername(authentication.getName());
         Account account = optionalAccount.orElseThrow(() -> new UsernameNotFoundException("Unable to find chatroom owner"));
+
         if(account.getUsername().equals(chatroom.getOwner().getUsername())) {
+            chatroomRepository.deleteFromAccountChatroomWithChatroomId(chatroom.getId());
             chatroomRepository.deleteById(chatroom.getId());
             logger.info("Deleted {}'s chatroom of id: {}", authentication.getName(), chatroom.getId());
             return new ResponseEntity<>("Successfully deleted chatroom", HttpStatus.OK);

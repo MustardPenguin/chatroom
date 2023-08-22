@@ -1,8 +1,10 @@
 package com.project.chatroom.room;
 
 import com.project.chatroom.account.Account;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,4 +22,9 @@ public interface ChatroomRepository extends JpaRepository<Chatroom, Integer> {
     List<Chatroom> findByOwnerOrderByIdDesc(Account account, Pageable pageable);
 
     List<Chatroom> findChatroomsByAccounts_Id(Integer accounts_id, Pageable pageable);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM account_chatroom WHERE chatroom_id = :id", nativeQuery = true)
+    void deleteFromAccountChatroomWithChatroomId(@Param("id") int id);
 }
