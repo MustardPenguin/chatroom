@@ -127,4 +127,22 @@ public class ChatroomResource {
 
         return new ResponseEntity<>(chatroomResponses, HttpStatus.OK);
     }
+
+    @DeleteMapping("/chatroom/{id}")
+    public ResponseEntity<String> deleteChatroom(@PathVariable int id) {
+        Optional<Chatroom> optionalChatroom = chatroomRepository.findById(id);
+        Chatroom chatroom = optionalChatroom.orElseThrow(() -> new UsernameNotFoundException("Chatroom of id: " + id + " not found"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        logger.info(authentication.toString());
+        Optional<Account> optionalAccount = accountRepository.findByUsername(authentication.getName());
+        Account account = optionalAccount.orElseThrow(() -> new UsernameNotFoundException("Unable to find chatroom owner"));
+        if(account.getUsername().equals(chatroom.getOwner().getUsername())) {
+            chatroomRepository.deleteById(chatroom.getId());
+            logger.info("Deleted {}'s chatroom of id: {}", authentication.getName(), chatroom.getId());
+            return new ResponseEntity<>("Successfully deleted chatroom", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("You must own the chatroom in order to delete it", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

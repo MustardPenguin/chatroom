@@ -3,6 +3,7 @@ package com.project.chatroom.account;
 import com.project.chatroom.jwt.JwtResponse;
 import com.project.chatroom.jwt.JwtTokenService;
 import com.project.chatroom.room.Chatroom;
+import com.project.chatroom.room.ChatroomRepository;
 import com.project.chatroom.room.ChatroomResponse;
 import com.project.chatroom.room.ChatroomUtil;
 import jakarta.validation.Valid;
@@ -27,16 +28,23 @@ public class AccountResource {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
-    private final ChatroomUtil chatroomUtil;
+    private final ChatroomRepository chatroomRepository;
+    private final AccountUtil accountUtil;
 
     Logger logger = LoggerFactory.getLogger(AccountResource.class);
 
-    public AccountResource(AccountRepository accountRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenService jwtTokenService, ChatroomUtil chatroomUtil) {
+    public AccountResource(AccountRepository accountRepository,
+                           PasswordEncoder passwordEncoder,
+                           AuthenticationManager authenticationManager,
+                           JwtTokenService jwtTokenService,
+                           ChatroomRepository chatroomRepository,
+                           AccountUtil accountUtil) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
-        this.chatroomUtil = chatroomUtil;
+        this.chatroomRepository = chatroomRepository;
+        this.accountUtil = accountUtil;
     }
 
     @PostMapping("/login")
@@ -86,5 +94,17 @@ public class AccountResource {
         accountRepository.save(account);
 
         return new ResponseEntity<String>("Successfully created account", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/chatroom/{id}/users")
+    public ResponseEntity<List<AccountResponse>> getChatroomUsers(@PathVariable int id) {
+        Optional<Chatroom> optionalChatroom = chatroomRepository.findById(id);
+        List<Account> accounts = optionalChatroom.map(chatroom -> accountRepository.findAccountsByChatrooms_Id(chatroom.getId())).orElse(null);
+        if(accounts == null) {
+            throw new UsernameNotFoundException("Cannot find room");
+        }
+        List<AccountResponse> accountResponses = accountUtil.convertAccountToAccountResponse(accounts);
+        logger.info(accountResponses.toString());
+        return new ResponseEntity<>(accountResponses, HttpStatus.OK);
     }
 }

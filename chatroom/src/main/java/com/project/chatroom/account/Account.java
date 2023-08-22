@@ -42,7 +42,7 @@ public class Account implements UserDetails {
 //    @JsonIgnore
 //    private List<Message> messages;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinTable(
             name = "account_chatroom",
@@ -51,9 +51,7 @@ public class Account implements UserDetails {
     )
     private Set<Chatroom> chatrooms;
 
-    public Account() {
-
-    }
+    public Account() {}
 
     public Account(Integer id, String username, String password, Role role) {
         this.id = id;

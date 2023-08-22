@@ -9,4 +9,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Optional<Account> findByUsername(String username);
 
     List<Account> findAccountsByChatroomsId(Integer chatrooms_id);
+
+    List<Account> findAccountsByChatrooms_Id(Integer chatrooms_id);
 }
