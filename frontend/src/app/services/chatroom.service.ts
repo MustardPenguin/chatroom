@@ -59,6 +59,21 @@ export class ChatroomService {
       return response;
   }
 
+  getChatroom(id: number) {
+    const getRequest = (): Promise<chatroom[]> => this.apiService.getChatroom(id)
+      .then(response => {
+
+        return [];
+      })
+      .catch(err => {
+        console.log(err);
+        return [];
+      });
+
+    const response = getRequest();
+    return response;
+  }
+
   joinRoom(id: number) {
     this.apiService.joinChatroom(id)
       .then(response => {
@@ -66,5 +81,20 @@ export class ChatroomService {
       }).catch(err => {
         console.log(err);
       })
+  }
+
+  deleteChatroom(id: number) {
+    const deleteRequest = (): Promise<boolean> => this.apiService.deleteChatroom(id)
+      .then(response => {
+        console.log(response);
+        return true;
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
+
+      const response = deleteRequest();
+      return response;
   }
 }

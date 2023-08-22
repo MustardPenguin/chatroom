@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { PaginationComponent } from './pagination/pagination.component';
+import { ChatroomComponent } from './chatroom/chatroom.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { PaginationComponent } from './pagination/pagination.component';
     LoginComponent,
     CreateRoomComponent,
     PaginationComponent,
+    ChatroomComponent,
   ],
   imports: [
     BrowserModule,

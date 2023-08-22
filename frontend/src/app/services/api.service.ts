@@ -43,6 +43,10 @@ export class ApiService {
     return api.get('/test', {})
   };
 
+  getChatroom(id: number) {
+    return api.get(`/chatroom/${id}`);
+  }
+
   getChatrooms(page: number) {
     const URIQuery = `?page=${page}`;
     return api.get(`/chatroom${URIQuery}`, {});
@@ -61,5 +65,9 @@ export class ApiService {
 
   joinChatroom(id: number) {
     return api.post(`/chatroom/${id}`, {}, {})
+  }
+
+  deleteChatroom(id: number) {
+    return api.delete(`/chatroom/${id}`);
   }
 }

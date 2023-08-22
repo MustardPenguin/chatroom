@@ -99,4 +99,14 @@ export class PaginationComponent implements OnInit, AfterViewInit {
     
     this.chatroomService.joinRoom(id);
   }
+
+  async deleteRoom(e: Event): Promise<void> {
+    const id = +((e.target as Element).getAttribute("value") || -1);
+    console.log(id);
+    const response = await this.chatroomService.deleteChatroom(id);
+    if(response) {
+      this.chatrooms = this.chatrooms.filter(chatroom => chatroom.id !== id);
+      console.log(this.chatrooms);
+    }
+  }
 }
