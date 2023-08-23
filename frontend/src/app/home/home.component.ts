@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   authenticated: boolean = false;
   currentList: string = "created";
   username: string = "";
+  buttonBorderClass: string = "border-amber-600";
 
   constructor(
     private accountService: AccountService, 
@@ -28,13 +29,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
       const buttons: HTMLElement[] = this.elementRef.nativeElement.querySelectorAll('.home-btn');
-      
+      // Button 0 = Created, Button 1 = Joined
       buttons.forEach(element => {
         element.addEventListener('click', () => {
           const attribute = element.getAttribute("value");
           
           this.currentList = attribute || this.currentList;
           console.log(this.currentList);
+          if(this.currentList === 'joined') {
+            buttons[1].classList.add(this.buttonBorderClass);
+            buttons[0].classList.remove(this.buttonBorderClass);
+          } else {
+            buttons[0].classList.add(this.buttonBorderClass);
+            buttons[1].classList.remove(this.buttonBorderClass);
+          }
         });
       });
       

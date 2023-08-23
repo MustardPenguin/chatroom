@@ -3,4 +3,5 @@ export interface chatroom {
     name: string,
     dateCreated: string,
     members: number,
+    joined: boolean
 }
