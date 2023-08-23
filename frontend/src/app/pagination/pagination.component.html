@@ -20,6 +20,7 @@
                 *ngIf="room.joined || pageType === 'created' || pageType === 'joined'"
                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded px-2 py-2"
                 [value]="room.id"
+                (click)="enterRoom($event)"
                 >Enter
             </button>
             <button *ngIf="pageType === 'created'"

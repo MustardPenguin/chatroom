@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
+import { ChatroomComponent } from './chatroom/chatroom.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -12,7 +13,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: LoginComponent },
   { path: 'rooms', component: RoomsComponent },
-  { path: 'create-room', component: CreateRoomComponent }
+  { path: 'create-room', component: CreateRoomComponent },
+  { path: 'chatroom/:id', component: ChatroomComponent }
 ];
 
 @NgModule({

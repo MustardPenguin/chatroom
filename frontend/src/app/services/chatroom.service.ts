@@ -60,14 +60,14 @@ export class ChatroomService {
   }
 
   getChatroom(id: number) {
-    const getRequest = (): Promise<chatroom[]> => this.apiService.getChatroom(id)
+    const getRequest = (): Promise<chatroom | null> => this.apiService.getChatroom(id)
       .then(response => {
-
-        return [];
+        const chatroom: chatroom = response.data;
+        return chatroom;
       })
       .catch(err => {
         console.log(err);
-        return [];
+        return null;
       });
 
     const response = getRequest();
