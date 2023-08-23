@@ -15,6 +15,7 @@ public class ChatroomResponse {
     private String owner;
 
     private int members;
+    private boolean joined;
 
     public ChatroomResponse(Chatroom chatroom, int members) {
         this.id = chatroom.getId();
@@ -22,6 +23,16 @@ public class ChatroomResponse {
         this.dateCreated = chatroom.getDateCreated();
         this.owner = chatroom.getOwner().getUsername();
         this.members = members;
+        this.joined = false;
+    }
+
+    public ChatroomResponse(Chatroom chatroom, int members, boolean joined) {
+        this.id = chatroom.getId();
+        this.name = chatroom.getName();
+        this.dateCreated = chatroom.getDateCreated();
+        this.owner = chatroom.getOwner().getUsername();
+        this.members = members;
+        this.joined = joined;
     }
 
     public int getId() {
@@ -62,5 +73,13 @@ public class ChatroomResponse {
 
     public void setMembers(int members) {
         this.members = members;
+    }
+
+    public boolean isJoined() {
+        return joined;
+    }
+
+    public void setJoined(boolean joined) {
+        this.joined = joined;
     }
 }

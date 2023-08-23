@@ -27,4 +27,5 @@ public interface ChatroomRepository extends JpaRepository<Chatroom, Integer> {
     @Modifying
     @Query(value = "DELETE FROM account_chatroom WHERE chatroom_id = :id", nativeQuery = true)
     void deleteFromAccountChatroomWithChatroomId(@Param("id") int id);
+
 }

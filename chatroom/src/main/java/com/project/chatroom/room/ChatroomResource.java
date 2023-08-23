@@ -62,8 +62,23 @@ public class ChatroomResource {
     public ResponseEntity<Set<ChatroomResponse>> getRooms(@RequestParam int page) {
         Pageable pageable = PageRequest.of(page, RESULTS_PER_PAGE);
 //        List<Chatroom> chatrooms = chatroomRepository.findAllOrderedByIdDesc();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Account account = null;
+        if(authentication.getClass().equals(org.springframework.security.authentication.UsernamePasswordAuthenticationToken.class)) {
+            String username = authentication.getName();
+            Optional<Account> optionalAccount = accountRepository.findByUsername(username);
+            account = optionalAccount.orElse(null);
+        }
+
+        Set<ChatroomResponse> chatroomResponses = new HashSet<>();
         List<Chatroom> chatrooms = chatroomRepository.findChatroomByOwnerNotNullOrderByIdDesc(pageable);
-        Set<ChatroomResponse> chatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(chatrooms);
+        if(account != null) {
+            chatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(chatrooms, account);
+        } else {
+            chatroomResponses = chatroomUtil.convertChatroomToChatroomResponse(chatrooms);
+        }
 
         return new ResponseEntity<>(chatroomResponses, HttpStatus.OK);
     }

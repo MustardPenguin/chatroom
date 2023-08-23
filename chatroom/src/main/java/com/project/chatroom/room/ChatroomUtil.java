@@ -26,4 +26,20 @@ public class ChatroomUtil {
 
         return chatroomResponses;
     }
+
+    public Set<ChatroomResponse> convertChatroomToChatroomResponse(Collection<Chatroom> chatrooms, Account account) {
+        Set<ChatroomResponse> chatroomResponses = new HashSet<>();
+
+        for(Chatroom chatroom: chatrooms) {
+            int members = accountRepository.findAccountsByChatroomsId(chatroom.getId()).size();
+
+            Optional<Object> hasJoinedRoom = accountRepository.findAccountFromAccountChatroom(chatroom.getId(), account.getId());
+            boolean joined = hasJoinedRoom.isPresent();
+
+            ChatroomResponse chatroomResponse = new ChatroomResponse(chatroom, members, joined);
+            chatroomResponses.add(chatroomResponse);
+        }
+
+        return chatroomResponses;
+    }
 }
