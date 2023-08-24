@@ -12,6 +12,18 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ChatroomComponent implements OnInit {
   chatroom: chatroom | null = null;
+  // Testing
+  messages: string[] = [
+    "testing", "testing", "testing", "testing", "testing", "testing", "testing",
+    "testing", "testing", "testing", "testing", "testing", "testing", "testing",
+    "testing", "testing", "testing", "testing", "testing", "testing", "testing",
+    "testing", "testing", "testing", "testing", "testing", "testing", "testing",
+    "testing", "testing", "testing", "testing", "testing", "testing", "testing",
+    
+  ];
+  members: string[] = [
+    "testing", "testing", "testing", "testing", "testing",
+  ];
 
   constructor(
     private accountService: AccountService, 

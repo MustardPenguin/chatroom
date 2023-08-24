@@ -37,7 +37,11 @@ export class AccountService {
     console.log('logout');
     this.authenticated = false;
     this.token = "";
-    this.apiService.updateAuthorizationHeaders(this.token);
+    this.apiService.updateAuthorizationHeaders("");
+    // this.router.navigate(["login"]);
+    // Bandage solution
+    // To do: https://www.youtube.com/watch?v=0GGFZdYe-FY
+    window.location.href = "/login";
   }
 
   register(username: string, password: string): void {
