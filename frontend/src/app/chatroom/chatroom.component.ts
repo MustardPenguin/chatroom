@@ -14,15 +14,18 @@ export class ChatroomComponent implements OnInit {
   chatroom: chatroom | null = null;
   // Testing
   messages: string[] = [
+    "first message", "testing", "testing", "testing", "testing", "testing", "testing",
     "testing", "testing", "testing", "testing", "testing", "testing", "testing",
     "testing", "testing", "testing", "testing", "testing", "testing", "testing",
     "testing", "testing", "testing", "testing", "testing", "testing", "testing",
-    "testing", "testing", "testing", "testing", "testing", "testing", "testing",
-    "testing", "testing", "testing", "testing", "testing", "testing", "testing",
+    "testing", "testing", "testing", "testing", "testing", "testing", "last message",
     
   ];
   members: string[] = [
-    "testing", "testing", "testing", "testing", "testing",
+    "first", "testing", "testingggggggggggg", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
+    "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
+    "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
+    "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
   ];
 
   constructor(
