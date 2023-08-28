@@ -31,7 +31,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers("/login", "/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/chatroom", "/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/chatroom/**", "/users").permitAll()
                         .anyRequest().authenticated()
 
         );

@@ -70,6 +70,10 @@ public class EntityTest {
         return account;
     }
 
+    public void addMessage(Account account, Chatroom chatroom, String message) {
+
+    }
+
     public Chatroom addChatroom(String name, Account owner) {
         Chatroom chatroom = new Chatroom(
                 null,

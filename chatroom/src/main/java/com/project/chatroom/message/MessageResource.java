@@ -44,7 +44,7 @@ public class MessageResource {
         boolean joined = accountRepository.findAccountFromAccountChatroom(id, account.getId()).isPresent();
         if(joined) {
             logger.info("Creating a message for {} from {}", chatroom.getName(), account.getUsername());
-            Message message = new Message(null, account, chatroom, LocalDateTime.now(), messageRequest.message());
+            Message message = new Message(null, account, chatroom, messageRequest.message());
             messageRepository.save(message);
             return new ResponseEntity<>("Successfully posted message", HttpStatus.OK);
         } else {
@@ -58,9 +58,9 @@ public class MessageResource {
         Optional<Chatroom> optionalChatroom = chatroomRepository.findById(id);
         Chatroom chatroom = optionalChatroom.orElseThrow(() -> new UsernameNotFoundException("Chatroom not found"));
 
-        List<Message> messages = messageRepository.getMessagesByChatroomIdOrderByLocalDateTime(chatroom.getId());
+        List<Message> messages = messageRepository.getMessagesByChatroomIdOrderByLocalDateTimeDesc(chatroom.getId());
         List<MessageResponse> messageResponses = messages.stream().map(message ->
-                new MessageResponse(message.getAccount().getUsername(), message.getMessage(), message.getLocalDateTime())).toList();
+                new MessageResponse(message.getAccount().getUsername(), message.getMessage(), message.getLocalDateTime().toString())).toList();
 
         return new ResponseEntity<>(messageResponses, HttpStatus.OK);
     }

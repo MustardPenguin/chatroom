@@ -19,6 +19,7 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     private Chatroom chatroom;
 
+
     private LocalDateTime localDateTime;
 
     private String message;
@@ -27,11 +28,11 @@ public class Message {
 
     }
 
-    public Message(Integer id, Account account, Chatroom chatroom, LocalDateTime localDateTime, String message) {
+    public Message(Integer id, Account account, Chatroom chatroom, String message) {
         this.id = id;
         this.account = account;
         this.chatroom = chatroom;
-        this.localDateTime = localDateTime;
+        this.localDateTime = LocalDateTime.now();
         this.message = message;
     }
 

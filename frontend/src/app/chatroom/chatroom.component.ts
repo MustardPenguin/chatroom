@@ -82,7 +82,6 @@ export class ChatroomComponent implements OnInit {
   }
 
   handleInputs(keyboardEvent: KeyboardEvent): void {
-    // console.log(keyboardEvent);
     if(keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
       this.sendMessage();
       keyboardEvent.preventDefault();

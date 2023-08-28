@@ -32,7 +32,5 @@ export class MessageService {
         console.log(err);
 
       })
-
-    
   }
 }

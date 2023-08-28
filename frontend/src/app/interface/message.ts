@@ -1,5 +1,5 @@
 export interface message {
     username: string,
-    date: string,
+    localDateTime: string,
     message: string,
 }

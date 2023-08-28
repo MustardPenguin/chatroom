@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
 
-    List<Message> getMessagesByChatroomIdOrderByLocalDateTime(Integer chatroom_id);
+    List<Message> getMessagesByChatroomIdOrderByLocalDateTimeDesc(Integer chatroom_id);
 }
