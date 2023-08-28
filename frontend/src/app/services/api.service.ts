@@ -70,4 +70,14 @@ export class ApiService {
   deleteChatroom(id: number) {
     return api.delete(`/chatroom/${id}`);
   }
+
+  getMessagesFromChatroom(id: number) {
+    return api.get(`/chatroom/${id}/message`);
+  }
+
+  postMessage(id: number, message: string) {
+    return api.post(`/chatroom/${id}/message`, {
+      message: message
+    });
+  }
 }

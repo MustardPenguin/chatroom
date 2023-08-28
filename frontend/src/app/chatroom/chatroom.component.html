@@ -1,30 +1,33 @@
 
 <div class="flex justify-center w-full h-4/5 max-h-full">
     <div class="flex mt-20 justify-around max-h-full h-5/6 w-5/6 border-solid border-2 rounded">
-        <!-- <div class="flex flex-col justify-between flex-1 max-w-full h-full max-h-full overflow-hidden"> -->
         <div class="flex flex-col max-w-full w-full">
             <div class="w-full flex justify-center text-2xl border-b-2 border-gray-400 border-solid">
-                Title
+                {{chatroom.name}}
             </div>
-            <!-- <div class="flex flex-col flex-1 justify-end overflow-y-scroll"> -->
-                <!-- <div class="flex flex-col flex-1 overflow-hidden"> -->
-            <div class="overflow-y-scroll flex flex-col-reverse">
+            <div class="overflow-y-scroll flex flex-col-reverse flex-1 px-4">
                 <div *ngFor="let message of messages"
                 class="flex flex-col"
                 >
-                    <div class="flex">
-                        <div>Messager</div>
-                        <div>Date</div>
+                    <div class="flex" 
+                    [ngClass]="{ 'justify-end': message.username === username }">
+                        <div class="font-bold text-xm">
+                            {{message.username}}
+                        </div>
+                        <div class="text-xm">-{{message.date}}</div>
                     </div>
-                    <div>{{message}}</div>
+                    <div class="text-xl flex"
+                    [ngClass]="{ 'justify-end': message.username === username }"
+                    >{{message.message}}</div>
                 </div>
             </div>
-            <!-- <textarea class="resize-none" rows="1" placeholder="Enter text here" required></textarea> -->
+
             <div class="flex">
-                <div contenteditable class="flex-1"></div>
-                <button class="px-2 bg-blue-400 rounded">></button>
+                <div contenteditable class="flex-1 contenteditable" (keydown)="handleInputs($event)"></div>
+                <button class="px-2 bg-blue-400 rounded"
+                (click)="sendMessage()"
+                >></button>
             </div>
-            
         </div>
         <div class="border-l-2 border-solid border-gray-400 flex flex-col">
             <div class="w-full flex justify-center text-2xl border-b-2 border-l-2 border-gray-400 border-solid">
