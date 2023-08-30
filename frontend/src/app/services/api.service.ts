@@ -80,4 +80,8 @@ export class ApiService {
       message: message
     });
   }
+
+  getUsersFromChatroom(id: number) {
+    return api.get(`/chatroom/${id}/users`);
+  }
 }

@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from './api.service';
+import { user } from '../interface/user';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +58,18 @@ export class AccountService {
         console.log(err);
         window.alert(err.response.data);
       });
+  }
+
+  getUsersFromChatroom(id: number): Promise<user[]> {
+    const members: Promise<user[]> = this.apiService.getUsersFromChatroom(id)
+      .then(response => {
+        const users: user[] = response.data;
+        return users;
+      })
+      .catch(err => {
+        console.log(err);
+        return [];
+      });
+    return members;
   }
 }

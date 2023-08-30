@@ -6,6 +6,8 @@ import { chatroom } from '../interface/chatroom';
 import { ActivatedRoute } from '@angular/router';
 import { message } from '../interface/message';
 import { MessageService } from '../services/message.service';
+import { StompService } from '../services/stomp.service';
+import { user } from '../interface/user';
 
 @Component({
   selector: 'app-chatroom',
@@ -30,35 +32,40 @@ export class ChatroomComponent implements OnInit {
   //   { username: "thecat", date: "07/07/7777 at 7:77", message: "cats" },
   // ]
 
-  members: string[] = [
-    "first", "testing", "testingggggggggggg", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
-    "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
-    "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
-    "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
-  ];
+    members: user[] = [];
+  // members: string[] = [
+  //   "first", "testing", "testingggggggggggg", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
+  //   "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
+  //   "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
+  //   "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
+  // ];
 
   constructor(
     private accountService: AccountService, 
     private chatroomService: ChatroomService,
     private messageService: MessageService,
+    private stompService: StompService,
     private apiService: ApiService,
     private route: ActivatedRoute,
     private renderer: Renderer2,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
     ) {}
 
   async ngOnInit(): Promise<void> {
     const id: number = +(this.route.snapshot.paramMap.get('id') || -1);
     console.log(id);
     this.chatroom = await this.chatroomService.getChatroom(id) || this.chatroom;
-    if(this.chatroom) {
-      console.log(this.chatroom);
-    }
 
+    console.log(this.chatroom);
+    
     // this.messages = await this.messageService.getMessageFromChatroom(id);
     const messages = await this.messageService.getMessageFromChatroom(id);
     this.messages = messages;
     this.formatMessages();
+
+    // this.stompService.activateStompClient();
+    const users = await this.accountService.getUsersFromChatroom(this.chatroom.id);
+    this.members = users;
   }
 
   formatMessages() {
