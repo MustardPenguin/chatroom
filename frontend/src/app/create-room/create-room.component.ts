@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../services/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-room',
@@ -12,7 +13,7 @@ export class CreateRoomComponent {
     name: ""
   };
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
   createRoom(event: Event): void {
     event.preventDefault();
@@ -23,8 +24,11 @@ export class CreateRoomComponent {
 
     this.apiService.postCreateRoom(this.room.name)
       .then(response => {
-        
         console.log(response);
+        if(response.status === 201) {
+          window.alert("Successfully created room");
+          this.router.navigate(["/home"]);
+        }
       })
       .catch(err => {
         console.log(err);

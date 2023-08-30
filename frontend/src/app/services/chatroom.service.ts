@@ -74,13 +74,15 @@ export class ChatroomService {
     return response;
   }
 
-  joinRoom(id: number) {
-    this.apiService.joinChatroom(id)
+  async joinRoom(id: number): Promise<boolean> {
+    return await this.apiService.joinChatroom(id)
       .then(response => {
         console.log(response);
+        return response.status === 200;
       }).catch(err => {
         console.log(err);
-      })
+        return false;
+      });
   }
 
   deleteChatroom(id: number) {

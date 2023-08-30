@@ -87,7 +87,7 @@ export class PaginationComponent implements OnInit, AfterViewInit {
     })
   }
 
-  joinRoom(e: Event): void {
+  async joinRoom(e: Event): Promise<void> {
     e.preventDefault();
     if(!this.accountService.authenticated) {
       window.alert("Please login first");
@@ -98,6 +98,14 @@ export class PaginationComponent implements OnInit, AfterViewInit {
     console.log(id);
     
     this.chatroomService.joinRoom(id);
+
+    const joined = await this.chatroomService.joinRoom(id);
+    if(joined) {
+      window.alert('Successfully joined room');
+      this.router.navigate([`/chatroom/${id}`]);
+    } else {
+      window.alert('Error joining room');
+    }
   }
 
   enterRoom(e: Event): void {

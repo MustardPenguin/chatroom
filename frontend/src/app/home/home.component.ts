@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.username = this.accountService.username;
       // this.chatroomService.getChatrooms();
   }
-  
+
   ngAfterViewInit(): void {
       const buttons: HTMLElement[] = this.elementRef.nativeElement.querySelectorAll('.home-btn');
       // Button 0 = Created, Button 1 = Joined
@@ -45,7 +45,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
           }
         });
       });
-      
   }
 
   getRooms(): chatroom[] {

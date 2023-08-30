@@ -10,7 +10,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./rooms.component.css']
 })
 export class RoomsComponent {
-  constructor(private accountService: AccountService, private chatroomService: ChatroomService, private router: Router) {}
+  constructor(
+    private accountService: AccountService, 
+    private chatroomService: ChatroomService, 
+    private router: Router) {}
 
   ngOnInit(): void {
       // this.chatroomService.getChatrooms();
@@ -23,19 +26,4 @@ export class RoomsComponent {
   isAuthenticated(): boolean {
     return this.accountService.authenticated;
   }
-
-  joinRoom(e: Event): void {
-    e.preventDefault();
-    if(!this.isAuthenticated()) {
-      window.alert("Please login first");
-      this.router.navigate(["/login"]);
-      return;
-    }
-    const id = +((e.target as Element).getAttribute("value") || -1);
-    console.log(id);
-    
-    this.chatroomService.joinRoom(id);
-  }
-
-
 }
