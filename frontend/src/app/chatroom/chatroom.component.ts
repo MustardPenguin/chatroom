@@ -58,14 +58,15 @@ export class ChatroomComponent implements OnInit {
 
     console.log(this.chatroom);
     
-    // this.messages = await this.messageService.getMessageFromChatroom(id);
     const messages = await this.messageService.getMessageFromChatroom(id);
     this.messages = messages;
     this.formatMessages();
 
-    // this.stompService.activateStompClient();
+    
     const users = await this.accountService.getUsersFromChatroom(this.chatroom.id);
     this.members = users;
+
+    this.stompService.activateStompClient();
   }
 
   formatMessages() {

@@ -104,7 +104,7 @@ public class AccountResource {
             throw new UsernameNotFoundException("Cannot find room");
         }
         List<AccountResponse> accountResponses = accountUtil.convertAccountToAccountResponse(accounts);
-        logger.info(accountResponses.toString());
+//        logger.info(accountResponses.toString());
         return new ResponseEntity<>(accountResponses, HttpStatus.OK);
     }
 }

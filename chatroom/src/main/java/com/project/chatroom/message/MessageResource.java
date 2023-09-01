@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -63,5 +65,11 @@ public class MessageResource {
                 new MessageResponse(message.getAccount().getUsername(), message.getMessage(), message.getLocalDateTime().toString())).toList();
 
         return new ResponseEntity<>(messageResponses, HttpStatus.OK);
+    }
+
+    @MessageMapping("/chat")
+    @SendTo("/topic/message")
+    public void sendMessage() {
+        logger.info("test websocket");
     }
 }
