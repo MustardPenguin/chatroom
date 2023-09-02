@@ -10,11 +10,13 @@ import org.springframework.security.authorization.SpringAuthorizationEventPublis
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 import java.util.List;
 
 @Configuration
+//@EnableWebSocketMessageBroker
 public class WebSocketSecurityConfig implements WebSocketMessageBrokerConfigurer {
 
 //    @Override

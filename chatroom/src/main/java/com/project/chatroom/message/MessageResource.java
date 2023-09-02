@@ -69,7 +69,10 @@ public class MessageResource {
 
     @MessageMapping("/chat")
     @SendTo("/topic/message")
-    public void sendMessage() {
-        logger.info("test websocket");
+    public ResponseEntity<String> sendMessage(@RequestBody MessageRequest messageRequest) {
+        logger.info(messageRequest.toString());
+        return new ResponseEntity<>(messageRequest.message(), HttpStatus.OK);
+//        throw new UsernameNotFoundException("test");
+//        return messageRequest.message();
     }
 }
