@@ -25,15 +25,15 @@ export class MessageService {
   }
 
   postMessage(id: number, message: string) {
-    const posted = this.apiService.postMessage(id, message)
-      .then(response => {
-        console.log(response);
-      })
-      .catch(err => {
-        console.log(err);
+    // const posted = this.apiService.postMessage(id, message)
+    //   .then(response => {
+    //     console.log(response);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
 
-    });
+    // });
     
-    this.stompService.publishMessage(message);
+    this.stompService.publishMessage(id, message);
   }
 }

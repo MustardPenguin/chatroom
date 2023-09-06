@@ -1,59 +1,64 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Client, Stomp } from '@stomp/stompjs';
 
-const stompClient = new Client({
-  brokerURL: "ws://localhost:8080/chat",
-  debug: (str: string) => { console.log(str); }
-});
-
 interface messageResponse {
-  body: string, headers: {}, statusCode: string, statusCodeValue: number
+  body: any, headers: {}, statusCode: string, statusCodeValue: number
 }
-
-stompClient.onConnect = (frame) => {
-  console.log('Connected ' + frame);
-  stompClient.subscribe('/topic/message', (message) => {
-    const messageResponse = JSON.parse(message.body);
-    if(messageResponse.statusCode === "OK") {
-      console.log(messageResponse.body);
-    } else {
-      console.log("Error receiving message response from subscription");
-    }
-  });
-}
-
-stompClient.onWebSocketError = (error) => {
-  console.error('Error with websocket', error);
-  stompClient.deactivate();
-};
-
-stompClient.onStompError = (frame) => {
-  console.error('Broker reported error: ' + frame.headers['message']);
-  console.error('Additional details: ' + frame.body);
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export class StompService {
   activated: boolean = false;
+  stompClient = new Client({
+    brokerURL: "ws://localhost:8080/chat",
+    debug: (str: string) => { console.log(str); }
+  });
 
   constructor() { }
 
+  addEvents(): void {
+    console.log('init stomp')
+    this.stompClient.onConnect = (frame) => {
+      console.log('Connected ' + frame);
+      console.log("Connecting to websocket");
+      this.stompClient.subscribe('/topic/message', (message) => {
+        const messageResponse: messageResponse = JSON.parse(message.body);
+        console.log(message);
+        if(messageResponse.statusCode === "OK") {
+          console.log(messageResponse);
+        } else {
+          console.log("Error receiving message response from subscription");
+        }
+      });
+    }
+
+    this.stompClient.onWebSocketError = (error) => {
+      console.error('Error with websocket', error);
+      this.stompClient.deactivate();
+    };
+    
+    this.stompClient.onStompError = (frame) => {
+      console.error('Broker reported error: ' + frame.headers['message']);
+      console.error('Additional details: ' + frame.body);
+    };
+  }
+
   activateStompClient(): void {
-    if(stompClient.connected) {
+    if(this.stompClient.connected) {
       this.deactivateStompClient();
     }
-    stompClient.activate();
+    this.addEvents();
+    this.stompClient.activate();
   }
 
   deactivateStompClient(): void {
-    stompClient.deactivate();
+    this.stompClient.deactivate();
   }
 
-  publishMessage(message: string): void {
-    stompClient.publish({
-      destination: "/chat",
+  publishMessage(id: number, message: string): void {
+    this.stompClient.publish({
+      destination: `/chatroom/${id}/message`,
       body: JSON.stringify({
         message: message
       })

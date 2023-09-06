@@ -19,26 +19,10 @@ export class ChatroomComponent implements OnInit {
     id: 1, name: "Loading...", dateCreated: "Loading...", members: 1, joined: true
   };
   username: string = "thecat";
-  // Testing
-  messages: message[] = [];
-  // messages: message[] = [
-  //   { username: "thedog", date: "07-07-7777 at 7:77", message: "first" },
-  //   { username: "thedog", date: "07-07-7777 at 7:77", message: "second" },
-  //   { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" },
-  //   { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" },
-  //   { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" },
-  //   { username: "thecat", date: "07/07/7777 at 7:77", message: "cats" },
-  //   { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" }, { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" }, { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" }, { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" }, { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" }, { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" }, { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" }, { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" }, { username: "thedog", date: "07-07-7777 at 7:77", message: "cats" },
-  //   { username: "thecat", date: "07/07/7777 at 7:77", message: "cats" },
-  // ]
 
-    members: user[] = [];
-  // members: string[] = [
-  //   "first", "testing", "testingggggggggggg", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
-  //   "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
-  //   "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
-  //   "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", "testing", 
-  // ];
+  messages: message[] = [];
+
+  members: user[] = [];
 
   constructor(
     private accountService: AccountService, 
