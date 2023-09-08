@@ -9,9 +9,9 @@ import { ApiService } from './services/api.service';
 export class AppComponent implements OnInit {
 
   constructor(private apiService: ApiService) {}
+
   ngOnInit(): void {
-      // this.apiService.updateHeaders(
-      //   "Basic " + btoa("user:dummy")
-      // );
+    // (window as any).global = window;
+    
   }
 }

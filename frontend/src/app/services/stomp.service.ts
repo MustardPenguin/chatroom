@@ -1,5 +1,10 @@
 import { Injectable, OnInit } from '@angular/core';
-import { Client, Stomp } from '@stomp/stompjs';
+import { Client, CompatClient, Stomp } from '@stomp/stompjs';
+import { AccountService } from './account.service';
+import * as SockJS from 'sockjs-client';
+
+
+// import sockjs from "sockjs-client/dist/sockjs";
 
 interface messageResponse {
   body: any, headers: {}, statusCode: string, statusCodeValue: number
@@ -10,12 +15,12 @@ interface messageResponse {
 })
 export class StompService {
   activated: boolean = false;
-  stompClient = new Client({
-    brokerURL: "ws://localhost:8080/chat",
+  private stompClient = new Client({
+    brokerURL: `ws://localhost:8080/chat`,
     debug: (str: string) => { console.log(str); }
   });
 
-  constructor() { }
+  constructor(private accountService: AccountService) { }
 
   addEvents(): void {
     console.log('init stomp')
@@ -50,6 +55,11 @@ export class StompService {
     }
     this.addEvents();
     this.stompClient.activate();
+
+    // https://stackoverflow.com/questions/74579858/uncaught-referenceerror-global-is-not-defined-in-angular
+    // WHYYY
+    // WHYYY
+    const socket = new SockJS('ws://localhost:8080/chat');
   }
 
   deactivateStompClient(): void {
@@ -59,6 +69,7 @@ export class StompService {
   publishMessage(id: number, message: string): void {
     this.stompClient.publish({
       destination: `/chatroom/${id}/message`,
+      // destination: `/chatroom/${id}/message`,
       body: JSON.stringify({
         message: message
       })
