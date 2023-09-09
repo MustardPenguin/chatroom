@@ -57,8 +57,6 @@ export class StompService {
     this.stompClient.activate();
 
     // https://stackoverflow.com/questions/74579858/uncaught-referenceerror-global-is-not-defined-in-angular
-    // WHYYY
-    // WHYYY
     const socket = new SockJS('ws://localhost:8080/chat');
   }
 
