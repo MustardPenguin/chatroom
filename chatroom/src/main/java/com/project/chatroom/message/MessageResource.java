@@ -74,6 +74,9 @@ public class MessageResource {
     public ResponseEntity<MessageResponse> sendMessage(@RequestBody MessageRequest messageRequest, @DestinationVariable int id) {
         logger.info(messageRequest.toString());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication);
+
         return new ResponseEntity<>(
                 new MessageResponse("", "", ""),
                 HttpStatus.OK
