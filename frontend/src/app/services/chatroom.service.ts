@@ -75,6 +75,7 @@ export class ChatroomService {
   }
 
   async joinRoom(id: number): Promise<boolean> {
+    console.log('joining room ' + id);
     return await this.apiService.joinChatroom(id)
       .then(response => {
         console.log(response);

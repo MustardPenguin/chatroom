@@ -79,4 +79,8 @@ export class ChatroomComponent implements OnInit {
       keyboardEvent.preventDefault();
     }
   }
+  
+  deactivateStompClient() {
+    this.stompService.deactivateStompClient();
+  }
 }

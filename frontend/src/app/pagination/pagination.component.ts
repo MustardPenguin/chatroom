@@ -97,7 +97,7 @@ export class PaginationComponent implements OnInit, AfterViewInit {
     const id = +((e.target as Element).getAttribute("value") || -1);
     console.log(id);
     
-    this.chatroomService.joinRoom(id);
+    // this.chatroomService.joinRoom(id);
 
     const joined = await this.chatroomService.joinRoom(id);
     if(joined) {
