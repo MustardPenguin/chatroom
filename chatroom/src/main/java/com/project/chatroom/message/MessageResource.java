@@ -29,6 +29,7 @@ public class MessageResource {
     private final ChatroomRepository chatroomRepository;
     private final MessageRepository messageRepository;
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
     public MessageResource(AccountRepository accountRepository, ChatroomRepository chatroomRepository, MessageRepository messageRepository) {
         this.accountRepository = accountRepository;
         this.chatroomRepository = chatroomRepository;
@@ -81,6 +82,13 @@ public class MessageResource {
                 new MessageResponse("", "", ""),
                 HttpStatus.OK
         );
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "Spring security test!";
+    }
+
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //
 //        String username = authentication.getName();
@@ -98,5 +106,5 @@ public class MessageResource {
 //        ));
 
 //        return new ResponseEntity<>(messageRequest.message(), HttpStatus.OK);
-    }
+    //}
 }

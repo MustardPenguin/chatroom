@@ -7,8 +7,8 @@ import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.web.socket.EnableWebSocketSecurity;
 import org.springframework.security.messaging.access.intercept.MessageMatcherDelegatingAuthorizationManager;
 
-@Configuration
-@EnableWebSocketSecurity
+//@Configuration
+//@EnableWebSocketSecurity
 public class WebSocketSecurityConfig {
 
     @Bean
@@ -16,8 +16,8 @@ public class WebSocketSecurityConfig {
         messages
 
 //                .nullDestMatcher().authenticated()
-//                .simpSubscribeDestMatchers("/topic/message").authenticated()
-//                .simpDestMatchers("/topic/**").authenticated()
+//                .simpSubscribeDestMatchers("/topic/message").permitAll()
+//                .simpDestMatchers("/topic/**").permitAll()
 //                .simpSubscribeDestMatchers("/user/**", "/topic/friends/*").hasRole("USER")
 //                .simpTypeMatchers(MESSAGE, SUBSCRIBE).denyAll()
                 .anyMessage().permitAll();

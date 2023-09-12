@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -32,14 +33,19 @@ public class SecurityConfiguration {
                 auth -> auth
                         .requestMatchers("/login", "/register", "/chat").permitAll()
                         .requestMatchers(HttpMethod.GET, "/chatroom/**", "/users").permitAll()
+
                         .anyRequest().authenticated()
 
         );
         http.csrf(AbstractHttpConfigurer::disable);
 //        http.cors(AbstractHttpConfigurer::disable);
         http.cors(Customizer.withDefaults());
+//        http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
-        http.httpBasic(Customizer.withDefaults());
+
+//        http.httpBasic(Customizer.withDefaults());
+
+
         http.headers(header ->
                 header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
         );

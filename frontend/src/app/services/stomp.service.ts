@@ -29,7 +29,6 @@ export class StompService {
       // login: 'thedog', passcode: 'thecat',
       Authorization: 'Bearer ' + this.accountService.token
     };
-    console.log(headers);
     // console.log(this.stompClient);
     
     this.stompClient.connect(headers, (frame: any) => {
@@ -47,7 +46,6 @@ export class StompService {
       });
     });
 
-    
   }
 
   publishMessage(id: number, message: string): void {
