@@ -31,7 +31,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers("/login", "/register", "/chat").permitAll()
+                        .requestMatchers("/login", "/register", "/chat/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/chatroom/**", "/users").permitAll()
 
                         .anyRequest().authenticated()

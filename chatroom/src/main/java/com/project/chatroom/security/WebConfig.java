@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedMethods("*")
 //                .allowedOrigins("http://localhost:4200");
-                .allowedOrigins("*");
+                .allowedOriginPatterns("http://localhost:4200");
+//                .allowedOrigins("*");
     }
 }

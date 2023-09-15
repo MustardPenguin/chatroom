@@ -45,8 +45,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //        registry.addEndpoint("/chat").setAllowedOrigins("http://localhost:4200/").withSockJS();
         registry
                 .addEndpoint("/chat")
-                .setAllowedOrigins("*")
-                .setHandshakeHandler(new WebSocketHandshakeHandler())
+//                .setAllowedOrigins("*")
+                .setAllowedOriginPatterns("*")
+//                .setHandshakeHandler(new WebSocketHandshakeHandler())
                 .withSockJS();
     }
 
@@ -59,12 +60,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.interceptors(new ChannelInterceptor() {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
+                System.out.println("intercept");
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if(StompCommand.CONNECT.equals(accessor.getCommand())) {
                     List<String> authorization = accessor.getNativeHeader("Authorization");
-                    System.out.println(accessor.toString());
-                    System.out.println(authorization);
-                    String accessToken = authorization.get(0).split(" ")[1];
+//                    System.out.println(accessor.toString());
+                    System.out.println("Authorization: " + authorization);
+//                    String accessToken = authorization.get(0).split(" ")[1];
 
 
 //                    Jwt jwt = jwtDecoder.decode(accessToken);
@@ -78,8 +80,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     // Disable CRSF
-    @Bean(name = "csrfChannelInterceptor")
-    ChannelInterceptor csrfChannelInterceptor() {
-        return new ChannelInterceptor() {};
-    }
+//    @Bean(name = "csrfChannelInterceptor")
+//    ChannelInterceptor csrfChannelInterceptor() {
+//        return new ChannelInterceptor() {};
+//    }
 }

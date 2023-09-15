@@ -46,6 +46,11 @@ export class StompService {
       });
     });
 
+    this.stompClient.onStompError = function(frame) {
+      console.log('Error');
+      console.log(frame);
+      console.log('-----------');
+    }
   }
 
   publishMessage(id: number, message: string): void {
