@@ -38,17 +38,19 @@ export class ChatroomComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const id: number = +(this.route.snapshot.paramMap.get('id') || -1);
     console.log(id);
-    this.chatroom = await this.chatroomService.getChatroom(id) || this.chatroom;
 
-    console.log(this.chatroom);
+    // Think these calls might be the problem, causing issues for websocket connection...
+    // this.chatroom = await this.chatroomService.getChatroom(id) || this.chatroom;
+
+    // console.log(this.chatroom);
     
-    const messages = await this.messageService.getMessageFromChatroom(id);
-    this.messages = messages;
-    this.formatMessages();
+    // const messages = await this.messageService.getMessageFromChatroom(id);
+    // this.messages = messages;
+    // this.formatMessages();
 
     
-    const users = await this.accountService.getUsersFromChatroom(this.chatroom.id);
-    this.members = users;
+    // const users = await this.accountService.getUsersFromChatroom(this.chatroom.id);
+    // this.members = users;
 
     this.stompService.activateStompClient();
   }

@@ -44,6 +44,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
+//        System.out.println(request.getRequestURI());
+//        if(request.getRequestURI().equals("/chat/info")) {
+//            System.out.println("Websocket request");
+//        }
+
         jwt = authorizationHeader.substring(7);
         username = jwtTokenService.extractUsername(jwt);
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

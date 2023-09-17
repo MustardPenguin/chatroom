@@ -17,6 +17,10 @@ export class StompService {
   activated: boolean = false;
 
   private stompClient: CompatClient = Stomp.over(new SockJS('http://localhost:8080/chat'));
+  // private stompClient: CompatClient = Stomp.over(function() {
+  //   return new WebSocket('ws://localhost:8080/chat');
+  // });
+
 
   constructor(private accountService: AccountService) { }
 
@@ -30,27 +34,27 @@ export class StompService {
       Authorization: 'Bearer ' + this.accountService.token
     };
     // console.log(this.stompClient);
-    
+    console.log(this.stompClient);
     this.stompClient.connect(headers, (frame: any) => {
       console.log('connected');
       
       console.log(frame);
-      this.stompClient.subscribe('/topic/message', (message) => {
-        const messageResponse: messageResponse = JSON.parse(message.body);
-        console.log(message);
-        if(messageResponse.statusCode === "OK") {
-          console.log(messageResponse);
-        } else {
-          console.log("Error receiving message response from subscription");
-        }
-      });
-    });
-
-    this.stompClient.onStompError = function(frame) {
-      console.log('Error');
-      console.log(frame);
-      console.log('-----------');
-    }
+      // this.stompClient.subscribe('/topic/message', (message) => {
+      //   const messageResponse: messageResponse = JSON.parse(message.body);
+      //   console.log(message);
+      //   if(messageResponse.statusCode === "OK") {
+      //     console.log(messageResponse);
+      //   } else {
+      //     console.log("Error receiving message response from subscription");
+      //   }
+      // });
+    }, (error: any) => console.log(error));
+    
+    // this.stompClient.onStompError = function(frame) {
+    //   console.log('Error');
+    //   console.log(frame);
+    //   console.log('-----------');
+    // }
   }
 
   publishMessage(id: number, message: string): void {
@@ -66,6 +70,9 @@ export class StompService {
 
   }
   ///////////////////
+
+
+  
   // publishMessage(id: number, message: string): void {
   //   this.stompClient.publish({
   //         destination: `/chatroom/${id}/message`,
