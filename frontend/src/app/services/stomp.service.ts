@@ -1,8 +1,10 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Client, CompatClient, Stomp } from '@stomp/stompjs';
 import { AccountService } from './account.service';
 import * as SockJS from 'sockjs-client';
 import { message } from '../interface/message';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 
 interface messageResponse {
   body: message, headers: {}, statusCode: string, statusCodeValue: number
@@ -12,13 +14,25 @@ interface messageResponse {
   providedIn: 'root'
 })
 export class StompService {
-  activated: boolean = false;
+  private activated: boolean = false;
 
   private stompClient: CompatClient = Stomp.over(new SockJS('http://localhost:8080/chat'));
 
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService, private router: Router) { 
+    const url = this.router.url;
+    console.log('new stomp client');
+    // router.events.forEach((event) => {
+    //   if(event instanceof NavigationStart) {
+    //     // this.router.url != url && 
+    //     if(this.stompClient.connected) {
+    //       this.deactivateStompClient();
+    //     }
+    //   }
+    // });
+  }
 
   activateStompClient(callback: (message: message, messages: message[]) => void, messages: message[]): void {
+    this.stompClient = Stomp.over(new SockJS('http://localhost:8080/chat'));
     const headers = {
       Authorization: 'Bearer ' + this.accountService.token
     };
@@ -50,6 +64,7 @@ export class StompService {
   }
 
   deactivateStompClient(): void {
-
+    console.log("Deactivating stomp client");
+    this.stompClient.deactivate();
   }
 }

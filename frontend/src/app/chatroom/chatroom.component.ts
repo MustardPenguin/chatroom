@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AccountService } from '../services/account.service';
 import { ChatroomService } from '../services/chatroom.service';
 import { ApiService } from '../services/api.service';
@@ -14,7 +14,7 @@ import { user } from '../interface/user';
   templateUrl: './chatroom.component.html',
   styleUrls: ['./chatroom.component.css']
 })
-export class ChatroomComponent implements OnInit {
+export class ChatroomComponent implements OnInit, OnDestroy {
   chatroom: chatroom = {
     id: 1, name: "Loading...", dateCreated: "Loading...", members: 1, joined: true
   };
@@ -35,6 +35,11 @@ export class ChatroomComponent implements OnInit {
     private elementRef: ElementRef,
     ) {}
 
+    ngOnDestroy(): void {
+        console.log('destroyed chatroom component');
+        this.stompService.deactivateStompClient();
+    }
+
   async ngOnInit(): Promise<void> {
     const id: number = +(this.route.snapshot.paramMap.get('id') || -1);
 
@@ -43,13 +48,10 @@ export class ChatroomComponent implements OnInit {
     this.chatroom = await this.chatroomService.getChatroom(id) || this.chatroom;
 
     const messages = await this.messageService.getMessageFromChatroom(id);
-    // this.messages = messages;
-    console.log(messages);
-    // this.messages.concat(messages);
+
     for(let i = 0; i < messages.length; i++) {
       this.messages.push(messages[i]);
     }
-    console.log(this.messages);
     this.formatMessages();
 
     const users = await this.accountService.getUsersFromChatroom(this.chatroom.id);
@@ -72,7 +74,6 @@ export class ChatroomComponent implements OnInit {
 
   onMessageReceived(message: message, messages: message[]): void {
     console.log(message);
-    // console.log(messages);
     messages.unshift(message);
   }
 
@@ -98,9 +99,5 @@ export class ChatroomComponent implements OnInit {
       target.innerHTML = "";
       keyboardEvent.preventDefault();
     }
-  }
-  
-  deactivateStompClient() {
-    this.stompService.deactivateStompClient();
   }
 }
