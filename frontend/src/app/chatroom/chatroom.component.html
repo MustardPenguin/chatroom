@@ -14,7 +14,7 @@
                         <div class="font-bold text-xm">
                             {{message.username}}
                         </div>
-                        <div class="text-xm">-{{message.localDateTime}}</div>
+                        <div class="text-xm">-{{filterDate(message.localDateTime)}}</div>
                     </div>
                     <div class="text-xl flex"
                     [ngClass]="{ 'justify-end': message.username === username }"
@@ -23,7 +23,7 @@
             </div>
 
             <div class="flex">
-                <div contenteditable class="flex-1 contenteditable" (keydown)="handleInputs($event)"></div>
+                <div contenteditable class="flex-1 contenteditable" (keydown)="handleInputs($event, $event)"></div>
                 <button class="px-2 bg-blue-400 rounded"
                 (click)="sendMessage()"
                 >></button>

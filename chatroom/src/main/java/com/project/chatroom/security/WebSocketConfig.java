@@ -80,10 +80,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.interceptors(new ChannelInterceptor() {
             @Override
             public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
-                System.out.println("intercept");
+//                System.out.println("intercept");
 
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                System.out.println(accessor.toString());
+//                System.out.println(accessor.toString());
                 if(StompCommand.CONNECT.equals(accessor.getCommand()) || StompCommand.SEND.equals(accessor.getCommand())) {
                     List<String> authorization = accessor.getNativeHeader("Authorization");
 

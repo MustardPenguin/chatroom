@@ -26,10 +26,10 @@ public class Chatroom {
     @JsonIgnore
     private Account owner;
 
-//    @OneToMany(mappedBy = "chatroom")
-//    @JsonIgnore
-//    private List<Message> messages;
-//
+    @OneToMany(mappedBy = "chatroom")
+    @JsonIgnore
+    private List<Message> messages;
+
     @ManyToMany(mappedBy = "chatrooms")
     @JsonIgnore
     private Set<Account> accounts;

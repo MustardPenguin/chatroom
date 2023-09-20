@@ -37,22 +37,25 @@ export class ChatroomComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const id: number = +(this.route.snapshot.paramMap.get('id') || -1);
-    console.log(id);
 
-    // Think these calls might be the problem, causing issues for websocket connection...
-    // this.chatroom = await this.chatroomService.getChatroom(id) || this.chatroom;
+    this.stompService.activateStompClient(this.onMessageReceived, this.messages);
 
-    // console.log(this.chatroom);
-    
-    // const messages = await this.messageService.getMessageFromChatroom(id);
+    this.chatroom = await this.chatroomService.getChatroom(id) || this.chatroom;
+
+    const messages = await this.messageService.getMessageFromChatroom(id);
     // this.messages = messages;
-    // this.formatMessages();
+    console.log(messages);
+    // this.messages.concat(messages);
+    for(let i = 0; i < messages.length; i++) {
+      this.messages.push(messages[i]);
+    }
+    console.log(this.messages);
+    this.formatMessages();
 
-    
-    // const users = await this.accountService.getUsersFromChatroom(this.chatroom.id);
-    // this.members = users;
+    const users = await this.accountService.getUsersFromChatroom(this.chatroom.id);
+    this.members = users;
 
-    this.stompService.activateStompClient();
+    console.log(this.chatroom);
   }
 
   formatMessages() {
@@ -67,6 +70,19 @@ export class ChatroomComponent implements OnInit {
     // }
   }
 
+  onMessageReceived(message: message, messages: message[]): void {
+    console.log(message);
+    // console.log(messages);
+    messages.unshift(message);
+  }
+
+  filterDate(date: string): string {
+    let formattedDate: string = date.slice(0, -7);
+    const i = formattedDate.indexOf('T');
+    formattedDate = date.slice(0, i) + " at " + date.slice(i + 1, -7);
+    return formattedDate;
+  }
+
   sendMessage(): void {
     const content = document.querySelector(".contenteditable");
     const text = content?.innerHTML;
@@ -75,9 +91,11 @@ export class ChatroomComponent implements OnInit {
     this.messageService.postMessage(this.chatroom.id, text as string);
   }
 
-  handleInputs(keyboardEvent: KeyboardEvent): void {
+  handleInputs(keyboardEvent: KeyboardEvent, event: Event): void {
     if(keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
       this.sendMessage();
+      const target = event.target as HTMLElement;
+      target.innerHTML = "";
       keyboardEvent.preventDefault();
     }
   }

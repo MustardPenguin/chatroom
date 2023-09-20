@@ -2,6 +2,7 @@ package com.project.chatroom.message;
 
 import com.project.chatroom.account.Account;
 import com.project.chatroom.account.AccountRepository;
+import com.project.chatroom.jwt.JwtTokenService;
 import com.project.chatroom.room.Chatroom;
 import com.project.chatroom.room.ChatroomRepository;
 import jakarta.validation.Valid;
@@ -9,9 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,12 +27,14 @@ public class MessageResource {
     private final AccountRepository accountRepository;
     private final ChatroomRepository chatroomRepository;
     private final MessageRepository messageRepository;
+    private final JwtTokenService jwtTokenService;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public MessageResource(AccountRepository accountRepository, ChatroomRepository chatroomRepository, MessageRepository messageRepository) {
+    public MessageResource(AccountRepository accountRepository, ChatroomRepository chatroomRepository, MessageRepository messageRepository, JwtTokenService jwtTokenService) {
         this.accountRepository = accountRepository;
         this.chatroomRepository = chatroomRepository;
         this.messageRepository = messageRepository;
+        this.jwtTokenService = jwtTokenService;
     }
 
 //    @PostMapping("/chatroom/{id}/message")
@@ -72,39 +73,32 @@ public class MessageResource {
 
     @MessageMapping("/chatroom/{id}/message")
     @SendTo("/topic/message")
-    public ResponseEntity<MessageResponse> sendMessage(@RequestBody MessageRequest messageRequest, @DestinationVariable int id) {
-        logger.info(messageRequest.toString());
+    public ResponseEntity<MessageResponse> sendMessage(@RequestBody MessageRequest messageRequest, @DestinationVariable int id, @Header("Authorization") String token) {
+        String jwt = token.substring(7);
+        String username = jwtTokenService.extractUsername(jwt);
+        logger.info("User {} sent message '{}' to chatroom {}", username, messageRequest.message(), id);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication);
+        Optional<Account> optionalAccount = accountRepository.findByUsername(username);
+        Account account = optionalAccount.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-        return new ResponseEntity<>(
-                new MessageResponse("", "", ""),
-                HttpStatus.OK
-        );
+        Optional<Chatroom> optionalChatroom = chatroomRepository.findById(id);
+        Chatroom chatroom = optionalChatroom.orElseThrow(() -> new UsernameNotFoundException("Chatroom not found"));
+
+        return accountRepository.findAccountFromAccountChatroom(id, account.getId()).map(exists -> {
+            Message message = new Message(null, account, chatroom, messageRequest.message());
+            messageRepository.save(message);
+            return new ResponseEntity<>(
+                    new MessageResponse(username, messageRequest.message(), message.getLocalDateTime().toString()),
+                    HttpStatus.OK
+            );
+        }).orElseGet(() -> new ResponseEntity<>(
+                new MessageResponse("", "You must be in the room in order to send a message" , ""),
+                HttpStatus.BAD_REQUEST
+        ));
+
+//        return new ResponseEntity<>(
+//                new MessageResponse(username, messageRequest.message(), ""),
+//                HttpStatus.OK
+//        );
     }
-
-    @GetMapping("/test")
-    public String test() {
-        return "Spring security test!";
-    }
-
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        String username = authentication.getName();
-//
-//        Account account = accountRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-//        Chatroom chatroom = chatroomRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Chatroom not found"));
-//
-//        return accountRepository.findAccountFromAccountChatroom(id, account.getId()).map(acc -> {
-//            Message message = new Message(null, account, chatroom, messageRequest.message());
-//            messageRepository.save(message);
-//            MessageResponse messageResponse = new MessageResponse(message.getMessage(), message.getAccount().getUsername(), message.getLocalDateTime().toString());
-//            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
-//        }).orElse(new ResponseEntity<>(
-//                new MessageResponse("", "", ""), HttpStatus.BAD_REQUEST
-//        ));
-
-//        return new ResponseEntity<>(messageRequest.message(), HttpStatus.OK);
-    //}
 }

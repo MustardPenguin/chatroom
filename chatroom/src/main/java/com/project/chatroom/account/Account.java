@@ -38,9 +38,9 @@ public class Account implements UserDetails {
     @JsonBackReference
     private Set<Chatroom> ownedRooms;
 
-//    @OneToMany(mappedBy = "account")
-//    @JsonIgnore
-//    private List<Message> messages;
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
+    private List<Message> messages;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonIgnore
