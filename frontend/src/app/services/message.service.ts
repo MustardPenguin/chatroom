@@ -10,8 +10,8 @@ export class MessageService {
 
   constructor(private apiService: ApiService, private stompService: StompService) { }
 
-  getMessageFromChatroom(id: number): Promise<message[]> {
-    const messages = this.apiService.getMessagesFromChatroom(id)
+  getMessageFromChatroom(id: number, page: number): Promise<message[]> {
+    const messages = this.apiService.getMessagesFromChatroom(id, page)
       .then(response => {
         console.log(response);
         const messagesResponse: message[] = response.data;
@@ -25,15 +25,6 @@ export class MessageService {
   }
 
   postMessage(id: number, message: string) {
-    // const posted = this.apiService.postMessage(id, message)
-    //   .then(response => {
-    //     console.log(response);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-
-    // });
-    
     this.stompService.publishMessage(id, message);
   }
 }

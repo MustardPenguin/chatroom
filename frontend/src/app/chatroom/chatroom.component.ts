@@ -19,10 +19,10 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     id: 1, name: "Loading...", dateCreated: "Loading...", members: 1, joined: true
   };
   username: string = "thecat";
-
   messages: message[] = [];
-
   members: user[] = [];
+  page: number = 0;
+  messageDebounce: boolean = false;
 
   constructor(
     private accountService: AccountService, 
@@ -47,7 +47,7 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
     this.chatroom = await this.chatroomService.getChatroom(id) || this.chatroom;
 
-    const messages = await this.messageService.getMessageFromChatroom(id);
+    const messages = await this.messageService.getMessageFromChatroom(id, this.page);
 
     for(let i = 0; i < messages.length; i++) {
       this.messages.push(messages[i]);
@@ -56,6 +56,8 @@ export class ChatroomComponent implements OnInit, OnDestroy {
 
     const users = await this.accountService.getUsersFromChatroom(this.chatroom.id);
     this.members = users;
+
+    this.username = this.accountService.username;
 
     console.log(this.chatroom);
   }
@@ -70,6 +72,34 @@ export class ChatroomComponent implements OnInit, OnDestroy {
     //     previousUsername = message.username;
     //   }
     // }
+  }
+
+  async onScroll(event: Event) {
+    const target = event.target as HTMLElement;
+    const scrollMax = target.scrollHeight - target.clientHeight - 10;
+    console.log(scrollMax)
+    if(Math.abs(target.scrollTop) > scrollMax && !this.messageDebounce) {
+      // console.log("refresh");
+      this.messageDebounce = true;
+      const scrollTop = target.scrollTop;
+
+      const messages = await this.messageService.getMessageFromChatroom(this.chatroom.id, ++this.page);
+      messages.forEach(message => {
+        this.messages.push(message);
+      });
+      if(messages.length === 10) {
+        // console.log(messages.length)
+        target.scrollTop = scrollMax;
+        
+      }
+      
+      // target.scrollTop
+
+
+      setTimeout(() => {
+        this.messageDebounce = false;
+      }, 1000);
+    }
   }
 
   onMessageReceived(message: message, messages: message[]): void {

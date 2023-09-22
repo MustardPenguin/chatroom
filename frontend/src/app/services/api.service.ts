@@ -71,8 +71,8 @@ export class ApiService {
     return api.delete(`/chatroom/${id}`);
   }
 
-  getMessagesFromChatroom(id: number) {
-    return api.get(`/chatroom/${id}/message`);
+  getMessagesFromChatroom(id: number, page: number) {
+    return api.get(`/chatroom/${id}/message?page=${page}`);
   }
 
   postMessage(id: number, message: string) {

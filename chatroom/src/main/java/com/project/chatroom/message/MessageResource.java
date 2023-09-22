@@ -8,6 +8,8 @@ import com.project.chatroom.room.ChatroomRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.*;
@@ -29,6 +31,8 @@ public class MessageResource {
     private final MessageRepository messageRepository;
     private final JwtTokenService jwtTokenService;
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private final int MAX_MESSAGE_PER_PAGE = 10;
 
     public MessageResource(AccountRepository accountRepository, ChatroomRepository chatroomRepository, MessageRepository messageRepository, JwtTokenService jwtTokenService) {
         this.accountRepository = accountRepository;
@@ -59,12 +63,12 @@ public class MessageResource {
 //    }
 
     @GetMapping("/chatroom/{id}/message")
-    public ResponseEntity<List<MessageResponse>> getChatroomMessage(@PathVariable int id) {
-
+    public ResponseEntity<List<MessageResponse>> getChatroomMessage(@PathVariable int id, @RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, MAX_MESSAGE_PER_PAGE);
         Optional<Chatroom> optionalChatroom = chatroomRepository.findById(id);
         Chatroom chatroom = optionalChatroom.orElseThrow(() -> new UsernameNotFoundException("Chatroom not found"));
 
-        List<Message> messages = messageRepository.getMessagesByChatroomIdOrderByLocalDateTimeDesc(chatroom.getId());
+        List<Message> messages = messageRepository.getMessagesByChatroomIdOrderByLocalDateTimeDesc(chatroom.getId(), pageable);
         List<MessageResponse> messageResponses = messages.stream().map(message ->
                 new MessageResponse(message.getAccount().getUsername(), message.getMessage(), message.getLocalDateTime().toString())).toList();
 
