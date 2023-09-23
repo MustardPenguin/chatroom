@@ -3,7 +3,9 @@ import axios, { AxiosResponse, AxiosStatic } from 'axios';
 import { AccountService } from './account.service';
 
 const api = axios.create({
-  baseURL: "http://localhost:8080"
+  // baseURL: "http://localhost:8080"
+  // baseURL: "http://localhost:5000"
+  baseURL: "http://chat-application-env-1.eba-nhxmu7am.us-east-1.elasticbeanstalk.com"
 }) as AxiosStatic;
 
 @Injectable({

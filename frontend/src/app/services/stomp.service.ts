@@ -15,8 +15,10 @@ interface messageResponse {
 })
 export class StompService {
   private activated: boolean = false;
+  // private link: string = 'http://localhost:5000/chat';
+  private link: string = 'http://chat-application-env-1.eba-nhxmu7am.us-east-1.elasticbeanstalk.com/chat';
 
-  private stompClient: CompatClient = Stomp.over(new SockJS('http://localhost:8080/chat'));
+  private stompClient: CompatClient = Stomp.over(new SockJS(this.link));
 
   constructor(private accountService: AccountService, private router: Router) { 
     const url = this.router.url;
@@ -32,7 +34,7 @@ export class StompService {
   }
 
   activateStompClient(callback: (message: message, messages: message[]) => void, messages: message[]): void {
-    this.stompClient = Stomp.over(new SockJS('http://localhost:8080/chat'));
+    this.stompClient = Stomp.over(new SockJS(this.link));
     const headers = {
       Authorization: 'Bearer ' + this.accountService.token
     };
@@ -53,6 +55,7 @@ export class StompService {
         }
       });
     }, (error: any) => console.log(error));
+    
   }
 
   publishMessage(id: number, message: string): void {
